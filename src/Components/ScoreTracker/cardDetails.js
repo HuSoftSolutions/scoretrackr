@@ -64,6 +64,11 @@ export default function CardDetails(props){
                 <Form.Label>Choose Layout:</Form.Label>
                 <ButtonGroup size="sm" className='holeAmountButtonGroup'>
                     <Button name='layoutSelection' 
+                        variant={chooseLayout === 9 ? 'info' : 'light'} 
+                        onClick={({target})=> updateCardDetails(target,9)}>
+                            9
+                    </Button>
+                    <Button name='layoutSelection' 
                         variant={chooseLayout === 18 ? 'info' : 'light'} 
                         onClick={({target})=> updateCardDetails(target,18)}>
                             18
