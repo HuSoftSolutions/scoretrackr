@@ -1,0 +1,36 @@
+.plContainer{
+    background-color: lightgrey;
+    border-radius:0.5em;
+    padding:0.5em;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    position: relative;
+    width: 80%;
+    margin-bottom: 10px;
+    box-shadow: -2px 2px 5px black;
+}
+
+.plName{
+    margin-bottom:0px;
+    margin-Left: 1em;
+    margin-right: 1em;
+    background-color: lightgrey;
+    font-size: x-large;
+}
+
+.playerScore {
+    font-size: x-large;
+    padding: 0px 15px;
+}
+
+.scoreIncrementDiv {
+    display: flex;
+    position: absolute;
+    right: 10px;
+}
+
+.scoreButton {
+    color: rgb(17, 122, 139);
+    cursor: pointer;
+}

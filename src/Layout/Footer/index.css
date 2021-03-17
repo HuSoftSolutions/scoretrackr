@@ -1,0 +1,13 @@
+.main-footer {
+  color: white;
+  text-align: center;
+  background-color: rgb(48, 48, 48);
+  padding-top: 1em;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.main-footer strong, p {
+  font-size: x-small;
+}

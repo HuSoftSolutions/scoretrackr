@@ -1,0 +1,8 @@
+.header {
+  background-color: darkgray;
+  padding: 1em;
+  text-align: center;
+  height: 10%;
+  min-height: 50px;
+  position: relative;
+  }

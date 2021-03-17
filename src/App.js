@@ -1,16 +1,14 @@
 import "./App.css";
-import { Button } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
-import Body from "./Body/index";
-import Footer from "./Footer/index";
+import Body from "./Layout/Body/index";
+import Footer from "./Layout/Footer/index";
+import Header from './Layout/Header/index';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div className="page-container">
-      <header className="header">
-        <h3>Welcome to <strong>ScoreTrackr</strong></h3>
-      </header>
+      <Header/>
       <Body />
       <Footer />
     </div>

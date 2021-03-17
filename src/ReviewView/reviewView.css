@@ -1,0 +1,10 @@
+.reviewView_PlayerIcon {
+    display: flex;
+}
+
+.incompleteHole {
+    background-color: red;
+    color: black;
+    font-weight: 700;
+    text-align: center;
+}
