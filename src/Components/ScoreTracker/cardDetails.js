@@ -6,7 +6,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import "./cardDetails.css";
 
 export default function CardDetails(props){
-    const [chooseLayout, setChosenLayout] = useState(18);
+    const [layout, setChosenLayout] = useState(18);
     const [players, setPlayers] = useState(['']);
     const [validated, setValidation] =  useState(false);
 
@@ -51,7 +51,7 @@ export default function CardDetails(props){
     }
 
     const startRound = () => {
-        props.startRound(players, chooseLayout);
+        props.startRound(players, layout);
     }
 
     return (
@@ -64,22 +64,22 @@ export default function CardDetails(props){
                 <Form.Label>Choose Layout:</Form.Label>
                 <ButtonGroup size="sm" className='holeAmountButtonGroup'>
                     <Button name='layoutSelection' 
-                        variant={chooseLayout === 9 ? 'info' : 'light'} 
+                        variant={layout === 9 ? 'info' : 'light'} 
                         onClick={({target})=> updateCardDetails(target,9)}>
                             9
                     </Button>
                     <Button name='layoutSelection' 
-                        variant={chooseLayout === 18 ? 'info' : 'light'} 
+                        variant={layout === 18 ? 'info' : 'light'} 
                         onClick={({target})=> updateCardDetails(target,18)}>
                             18
                     </Button>
                      <Button name='layoutSelection' 
                         onClick={({target})=> updateCardDetails(target,27)} 
-                        variant={chooseLayout === 27 ? 'info' : 'light'}>
+                        variant={layout === 27 ? 'info' : 'light'}>
                             27
                     </Button>
                      <Button name='layoutSelection' 
-                        variant={chooseLayout === 36 ? 'info' : 'light'}
+                        variant={layout === 36 ? 'info' : 'light'}
                         onClick={({target})=> updateCardDetails(target,36)}>
                             36
                     </Button>
@@ -98,7 +98,7 @@ export default function CardDetails(props){
                     </InputGroup.Prepend>
                        
                         <Form.Control aria-label="Username" placeholder="ex: John Doe" size="sm" name="playerName" aria-describedby="playerName" className="playerInput" onChange={({target})=> playerInputHandler(target.value, 0)}/>
-                        <Button className="addPlayerButton" type="button" size="sm" variant="success" name="addPlayer" onClick={({target})=>updateCardDetails(target)}>Add Player</Button>
+                        
                     </div>
                         {players.length > 1 ?
                          players.map((player, index) => {
@@ -113,10 +113,11 @@ export default function CardDetails(props){
                                 )}
                         }): null}
                </Form.Group>
-               <div className="startRoundButtonDiv">
+           </Form>
+           <div className="startRoundButtonDiv">
+                <Button className="addPlayerButton" type="button" size="sm" variant="success" name="addPlayer" onClick={({target})=>updateCardDetails(target)}>Add Player</Button>
                  <Button type="button" variant='info' disabled={!validated} onClick={startRound}>Start Round</Button>
                </div>
-           </Form>
         </div>
     );
 }

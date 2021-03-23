@@ -5,6 +5,8 @@
   padding: 1em;
   background: inherit;
   overflow: auto;
+  height: 100%;
+  position:relative;
 }
 
 .createScorecardButton {

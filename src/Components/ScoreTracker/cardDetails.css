@@ -12,15 +12,17 @@
     border: darkGray 4px solid;
     border-radius: 10px;
     height: 65%;
-    min-height: 250px;
+    min-height: 275px;
     max-width: 300px;
+    position: relative;
 }
 
 .cardDetailsForm {
     padding-left: 1%;
     padding-right: 1%;
     height: 89%;
-    position: relative;
+    max-height: 270px;
+    overflow-y: auto;
 }
 
 .layoutPadding {
@@ -28,13 +30,13 @@
 }
 
 .startRoundButtonDiv {
-    position: absolute;
-    bottom: 0px;
     width: 98%;
+    margin: auto;
 }
 
 .startRoundButtonDiv .btn {
-    width: 100%
+    width: 100%;
+    margin-top: 1px;
 }
 
 .playerInput {
@@ -50,8 +52,7 @@
     overflow-y: auto;
 }
 .addPlayerButton {
-    right: 5px;
-    position: absolute;
+    
 }
 
  .holeAmountButtonGroup {

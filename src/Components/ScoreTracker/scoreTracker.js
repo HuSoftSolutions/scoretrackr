@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import CardDetails from "./cardDetails";
 import HoleTracker from "./holeTracker";
 import ReviewView from "../ReviewView/reviewView";
+import Pagination from '@material-ui/lab/Pagination';
+
 
 import "./scoreTracker.css";
 
@@ -11,10 +13,19 @@ export default function ScoreTracker(props) {
   const [roundStart, setRoundStart] = useState(false);
   const [scorecard, setScorecard] = useState({});
 
+const [activeHoleIndex, setActiveIndex] = useState(1);
+
+
   const [ reviewView, toggleReviewView ] = useState(false);
   const [ reviewViewRoundData, setReviewViewRoundData ] = useState();
 
  
+const handlePaginationChange = (e, selectedIndex) => {
+  debugger;
+    if (selectedIndex !== activeHoleIndex) {
+        setActiveIndex(selectedIndex);
+    }
+  };
 
   const startRound = (playerList, roundLength) => {
     let roundLengthArray = [];
@@ -56,14 +67,19 @@ export default function ScoreTracker(props) {
   return (
     <div className="match_container">
       {roundStart && !reviewView ? 
+      <React.Fragment>
       <HoleTracker 
         playerList={players} 
         roundLength={roundLength} 
         updateScorecard={updateScorecard} 
         scorecardReview={openScorecardReview}
         scorecard={scorecard}
+        activeIndex={activeHoleIndex}
         
-        /> : roundStart && reviewView ?
+        /> 
+    <Pagination count={roundLength.length} page={activeHoleIndex} onChange={handlePaginationChange} className='navigation' />
+    </React.Fragment>
+    : roundStart && reviewView ?
         <ReviewView roundData={reviewViewRoundData} closeReviewView={()=>toggleReviewView(false)} />
 :
       <CardDetails startRound={startRound}/>

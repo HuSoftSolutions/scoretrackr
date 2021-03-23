@@ -116,9 +116,8 @@
 
 .ReviewScorecard {
     cursor: pointer;
-    position: absolute;
-    right: 0;
     z-index: 100;
+    text-align: end;
 }
 
 .ReviewScorecard:hover {
@@ -134,7 +133,7 @@
 .navigation {
     width: 100%;
     position: absolute;
-    bottom: 0;
+    bottom: 5px;
 }
 
 .navigation ul {
