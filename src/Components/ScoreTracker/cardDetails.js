@@ -3,25 +3,35 @@ import Button from "react-bootstrap/Button";
 import PlayerIcon from "../../Icons_Images/playerIcon";
 import { Form, InputGroup } from "react-bootstrap";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { useStore } from './../../store';
 import "./cardDetails.css";
 
 export default function CardDetails(props){
-    const [chooseLayout, setChosenLayout] = useState(18);
-    const [players, setPlayers] = useState(['']);
+    const {state, dispatch} = useStore();
     const [validated, setValidation] =  useState(false);
 
-    const updateCardDetails = (eventTarget, details) => {
-        debugger;
-        const detail = eventTarget.name,
-        value = details;
-        switch (detail) {
+    const updateCardDetails = (eventTarget, value) => {
+        const action = eventTarget.name;
+        switch (action) {
             case 'layoutSelection':
-                setChosenLayout(value)
+                dispatch({
+                    type: "update-active-layout",
+                    activeLayout: value 
+                  });
             break;
             case 'addPlayer':
-                setPlayers((prev)=>{
-                    return [...prev, '']
-                });
+                dispatch({
+                    type: "add-active-players",
+                    newPlayer: ''
+                  });
+                setValidation(false);
+                break;
+            case 'removePlayer':
+                const newActivePlayers = state.activePlayers.filter((player, index)=> index !== value);
+                dispatch({
+                    type: "remove-active-players",
+                    activePlayers: newActivePlayers
+                  });
                 setValidation(false);
                 break;
             default:
@@ -29,13 +39,16 @@ export default function CardDetails(props){
     };
 
     const playerInputHandler = (value, index) => {
-        let newPlayers = players;
-        players.map((player, pIndex)=>{
+        let newPlayers = state.activePlayers;
+        state.activePlayers.map((player, pIndex)=>{
              if (pIndex === index) {
                 newPlayers[index] = value
              }  
         });
-        setPlayers(newPlayers);
+        dispatch({
+            type: "update-active-players", 
+            activePlayers: newPlayers
+        })
         validationCheck(newPlayers);
     };
 
@@ -51,9 +64,10 @@ export default function CardDetails(props){
     }
 
     const startRound = () => {
-        props.startRound(players, chooseLayout);
+        props.startRound();
     }
 
+    const holeFormats = [9, 18, 27, 36];
     return (
         <div className='cardDetails'>
             <div className='cardDetailsHeader'>
@@ -61,29 +75,16 @@ export default function CardDetails(props){
             </div>
            <Form className="cardDetailsForm" >
                <Form.Group className="layoutPadding">
-                <Form.Label>Choose Layout:</Form.Label>
+                <Form.Label>Choose Hole Layout:</Form.Label>
                 <ButtonGroup size="sm" className='holeAmountButtonGroup'>
-                    <Button name='layoutSelection' 
-                        variant={chooseLayout === 18 ? 'info' : 'light'} 
-                        onClick={({target})=> updateCardDetails(target,18)}>
-                            18
-                    </Button>
-                     <Button name='layoutSelection' 
-                        onClick={({target})=> updateCardDetails(target,27)} 
-                        variant={chooseLayout === 27 ? 'info' : 'light'}>
-                            27
-                    </Button>
-                     <Button name='layoutSelection' 
-                        variant={chooseLayout === 36 ? 'info' : 'light'}
-                        onClick={({target})=> updateCardDetails(target,36)}>
-                            36
-                    </Button>
+                    {holeFormats.map((holeAmount)=> 
+                        <Button name='layoutSelection' 
+                            variant={holeAmount === state.activeLayout ? 'info' : 'light'} 
+                            onClick={({target})=> updateCardDetails(target, holeAmount)}>
+                                {holeAmount}H
+                        </Button>
+                    )}
                 </ButtonGroup>
-               {/* <div key={`inline-radio`} className="mb-3" required>
-                    <Form.Check inline label="18 Holes" type={'radio'} name='layoutSelection' defaultChecked onChange={({target})=> updateCardDetails(target,18)}/>
-                    <Form.Check inline label="27 Holes" type={'radio'} name='layoutSelection'  onChange={({target})=>updateCardDetails(target,27)}/>
-                    <Form.Check inline label="36 Holes" type={'radio'} name='layoutSelection'  onChange={({target})=>updateCardDetails(target,36)}/>
-                </div> */}
                </Form.Group>
                <Form.Label>Players:</Form.Label>
                <Form.Group controlId="playersInput" className="playerInputGroup">
@@ -93,10 +94,10 @@ export default function CardDetails(props){
                     </InputGroup.Prepend>
                        
                         <Form.Control aria-label="Username" placeholder="ex: John Doe" size="sm" name="playerName" aria-describedby="playerName" className="playerInput" onChange={({target})=> playerInputHandler(target.value, 0)}/>
-                        <Button className="addPlayerButton" type="button" size="sm" variant="success" name="addPlayer" onClick={({target})=>updateCardDetails(target)}>Add Player</Button>
+                        
                     </div>
-                        {players.length > 1 ?
-                         players.map((player, index) => {
+                        {state.activePlayers ? state.activePlayers.length > 1 ?
+                         state.activePlayers.map((player, index) => {
                              if (index !== 0) {
                                 return  (
                                 <div className="playerDiv" key={index}>
@@ -104,14 +105,16 @@ export default function CardDetails(props){
                                         <InputGroup.Text id="playerNames" style={{'padding': '.375rem'}}>{PlayerIcon('')}</InputGroup.Text>
                                     </InputGroup.Prepend>
                                     <Form.Control className="playerInput" onChange={({target})=> playerInputHandler(target.value, index)} aria-describedby="playerNames" aria-label="Username" placeholder="ex: John Doe" size="sm" name="playerName" />
+                                    <Button variant="outline-danger" size="sm" name="removePlayer" onClick={({target})=>updateCardDetails(target, index)}>X</Button>
                                 </div>
                                 )}
-                        }): null}
+                        }): null : null}
                </Form.Group>
-               <div className="startRoundButtonDiv">
+           </Form>
+           <div className="startRoundButtonDiv">
+                <Button className="addPlayerButton" type="button" size="sm" variant="success" name="addPlayer" onClick={({target})=>updateCardDetails(target)}>Add Player</Button>
                  <Button type="button" variant='info' disabled={!validated} onClick={startRound}>Start Round</Button>
                </div>
-           </Form>
         </div>
     );
 }
