@@ -19,10 +19,10 @@ export default function PlayerScore(props) {
     }
 
     useEffect(function(){
-        if (props.scorecard[props.name] && props.scorecard[props.name][props.hole]) {
+        if (props.scorecard && props.scorecard[props.name] && props.scorecard[props.name][props.hole]) {
             setScore(props.scorecard[props.name][props.hole])
         }
-     }, []);
+     });
 
 
     return (
