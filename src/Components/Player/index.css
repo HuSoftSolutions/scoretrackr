@@ -9,6 +9,7 @@
     width: 80%;
     margin-bottom: 10px;
     box-shadow: -2px 2px 5px black;
+    min-height: 52px;
 }
 
 .plName{
