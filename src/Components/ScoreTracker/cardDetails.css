@@ -32,6 +32,7 @@
 .startRoundButtonDiv {
     width: 98%;
     margin: auto;
+    margin-bottom: 2px;
 }
 
 .startRoundButtonDiv .btn {

@@ -2,14 +2,13 @@ import React, { createContext, useContext, useReducer } from "react";
 
 const StoreContext = createContext();
 const INITIAL_STATE = {
-    allPlayers: null,
-    activePlayers: [''], 
-    activeLayout: 18, 
-    activeScorecard: null
+  allPlayers: null,
+  activePlayers: [""],
+  activeLayout: 18,
+  activeScorecard: null,
 };
 
 const reducer = (state, action) => {
-debugger;
 
   switch (action.type) {
     case "fetch-all-players":
@@ -23,19 +22,19 @@ debugger;
       console.log("[ACTIVE_PLAYER UPDATED]", action);
       return {
         ...state,
-        activePlayers: action.activePlayers
+        activePlayers: action.activePlayers,
       };
-      case "add-active-players":
+    case "add-active-players":
       console.log("[ACTIVE_PLAYER ADDED]", action);
       return {
         ...state,
-        activePlayers: [...state.activePlayers, action.newPlayer]
+        activePlayers: [...state.activePlayers, action.newPlayer],
       };
-      case "remove-active-players":
+    case "remove-active-players":
       console.log("[ACTIVE_PLAYER REMOVED]", action);
       return {
         ...state,
-        activePlayers: action.activePlayers
+        activePlayers: action.activePlayers,
       };
 
     case "update-active-layout":
@@ -44,12 +43,12 @@ debugger;
         ...state,
         activeLayout: action.activeLayout,
       };
-      case "update-active-scorecard":
-        console.log("[ACTIVE_SCORECARD UPDATED]", action);
-        return {
-          ...state,
-          activeScorecard: action.scorecard,
-        };
+    case "update-active-scorecard":
+      console.log("[ACTIVE_SCORECARD UPDATED]", action);
+      return {
+        ...state,
+        activeScorecard: action.scorecard,
+      };
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

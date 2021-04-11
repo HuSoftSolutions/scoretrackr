@@ -8,3 +8,11 @@
     font-weight: 700;
     text-align: center;
 }
+
+.tableHeaderWords {
+   font-size: 12px;
+}
+
+.alignTextCenter {
+    text-align: center;
+}
