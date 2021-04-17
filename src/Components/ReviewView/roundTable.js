@@ -4,6 +4,7 @@ import "./reviewView.css";
 
 export default function RoundTable(props) {
   const PlayerScoreTableBody = (props) => {
+    debugger;
     if (
       props.props.scorecardInfo.scorecard[props.props.player] &&
       props.props.scorecardInfo.scorecard[props.props.player][props.hole] !==
@@ -55,6 +56,12 @@ export default function RoundTable(props) {
                 {props.props.scorecardInfo.totals[props.props.player].total}
               </td>
             </React.Fragment>
+          );
+        case props.hole == "Total":
+          return (
+            <td style={{ textAlign: "center" }}>
+              {props.props.scorecardInfo.totals[props.props.player].total}
+            </td>
           );
         default:
           return;

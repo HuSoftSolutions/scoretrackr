@@ -131,8 +131,12 @@ export default function ScoreTracker(props) {
           }
           inTrue_OutFalse = !inTrue_OutFalse;
         } else nineHoleSplit.push(i);
-      } else nineHoleSplit.push(i);
+      } else {
+         nineHoleSplit.push(i);
+         if (i == state.activeLayout) nineHoleSplit.push("Total")
+      }
     }
+    if (state.activeLayout <= 9) reviewRoundLayout.push(nineHoleSplit);
     setReviewViewRoundData({ scorecard, players, reviewRoundLayout, totals });
     toggleReviewView(true);
   };
