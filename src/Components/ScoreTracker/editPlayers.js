@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-
+import "./editPlayers.css";
 import PlayerIcon from "../../Icons_Images/playerIcon";
 
 import { useStore } from "./../../store";
@@ -17,7 +17,6 @@ export default function EditPlayers(props) {
       type: "remove-active-players",
       activePlayers: newActivePlayers,
     });
-    props.validate(newActivePlayers);
   };
 
   const onChangePlayerName = (value, index) => {
@@ -31,9 +30,6 @@ export default function EditPlayers(props) {
       type: "update-active-players",
       activePlayers: newPlayers,
     });
-    if (props.validate) {
-      props.validate(newPlayers);
-    }
   };
 
   const removePlayerButton = (index, lastPlayerNotRemoved) => {
@@ -79,8 +75,7 @@ export default function EditPlayers(props) {
           name="playerName"
           value={name}
         />
-        <br />
-        {removePlayerButton(index, lastPlayerNotRemoved)}
+        <div className="removePlayerButtonDiv" style={{marginLeft: '2px'}}>{removePlayerButton(index, lastPlayerNotRemoved)}</div>
       </div>
     );
   };

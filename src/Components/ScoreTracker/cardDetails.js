@@ -9,7 +9,6 @@ import "./cardDetails.css";
 
 export default function CardDetails(props) {
   const { state, dispatch } = useStore();
-  const [validated, setValidation] = useState(false);
 
   const updateCardDetails = (eventTarget, value) => {
     const action = eventTarget.name;
@@ -25,10 +24,9 @@ export default function CardDetails(props) {
           type: "add-active-players",
           newPlayer: "",
         });
-        setValidation(false);
         break;
       default:
-          break;
+        break;
     }
   };
 
@@ -43,10 +41,10 @@ export default function CardDetails(props) {
       type: "update-active-players",
       activePlayers: newPlayers,
     });
-    validationCheck(newPlayers);
   };
 
-  const validationCheck = (players) => {
+  const validateActivePlayers = () => {
+    const players = state.activePlayers;
     let validated = true;
 
     players.map((player) => {
@@ -54,7 +52,7 @@ export default function CardDetails(props) {
         validated = false;
       }
     });
-    setValidation(validated);
+    return validated;
   };
 
   const startRound = () => {
@@ -103,7 +101,7 @@ export default function CardDetails(props) {
             />
           </div>
 
-          <EditPlayers cardDetails validate={validationCheck} playerList={"active"}/>
+          <EditPlayers cardDetails playerList={"active"} />
         </Form.Group>
       </Form>
       <div className="startRoundButtonDiv">
@@ -120,7 +118,7 @@ export default function CardDetails(props) {
         <Button
           type="button"
           variant="info"
-          disabled={!validated}
+          disabled={!validateActivePlayers()}
           onClick={startRound}
         >
           Start Round

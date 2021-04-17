@@ -8,6 +8,7 @@
   width: 100%;
 }
 
-.main-footer strong, p {
+.main-footer strong,
+p {
   font-size: x-small;
 }

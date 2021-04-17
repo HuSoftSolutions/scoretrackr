@@ -67,7 +67,7 @@ export default function ScoreTracker(props) {
     const scorecard = state.activeScorecard ? state.activeScorecard : {};
     state.activePlayers.map((player) => {
       let totalCount = 0,
-        rd1Out = null,
+        rd1Out = 0,
         rd1In = null,
         rd2Out = null,
         rd2In = null;
@@ -76,16 +76,16 @@ export default function ScoreTracker(props) {
           if (scorecard[player][hole] > 0) {
             if (roundLength.length > 9) {
               switch (true) {
-                case (hole < 10):
+                case hole < 10:
                   rd1Out += scorecard[player][hole];
                   break;
-                case (hole > 9 && hole < 19):
+                case hole > 9 && hole < 19:
                   rd1In += scorecard[player][hole];
                   break;
-                case (hole > 18 && hole < 28):
+                case hole > 18 && hole < 28:
                   rd2Out += scorecard[player][hole];
                   break;
-                case (hole > 27):
+                case hole > 27:
                   rd2In += scorecard[player][hole];
                   break;
                 default:
@@ -112,17 +112,26 @@ export default function ScoreTracker(props) {
       players = state.activePlayers,
       scorecard = state.activeScorecard;
     let reviewRoundLayout = [],
+      nineHoleSplit = [],
       inTrue_OutFalse = false;
+
     for (let i = 1; i <= state.activeLayout; i++) {
       if (state.activeLayout > 9) {
         if (i % 9 == 0) {
-          reviewRoundLayout.push(i);
-          inTrue_OutFalse == false
-            ? reviewRoundLayout.push("OUT")
-            : reviewRoundLayout.push("IN");
+          nineHoleSplit.push(i);
+          if (inTrue_OutFalse === false) {
+            nineHoleSplit.push("OUT");
+            reviewRoundLayout.push(nineHoleSplit);
+            nineHoleSplit = [];
+          }
+          else {
+            nineHoleSplit.push("IN");
+            reviewRoundLayout.push(nineHoleSplit);
+            nineHoleSplit = [];
+          }
           inTrue_OutFalse = !inTrue_OutFalse;
-        } else reviewRoundLayout.push(i);
-      } else reviewRoundLayout.push(i);
+        } else nineHoleSplit.push(i);
+      } else nineHoleSplit.push(i);
     }
     setReviewViewRoundData({ scorecard, players, reviewRoundLayout, totals });
     toggleReviewView(true);
@@ -148,7 +157,7 @@ export default function ScoreTracker(props) {
   };
 
   return (
-    <div className="match_container">
+    <React.Fragment>
       {!roundStart ? (
         <CardDetails startRound={startRound} />
       ) : reviewView ? (
@@ -157,22 +166,24 @@ export default function ScoreTracker(props) {
           closeReviewView={() => toggleReviewView(false)}
         />
       ) : (
-        <React.Fragment>
+        <div className="holeTrackerDiv">
           <HoleTracker
             updateScorecard={updateScorecard}
             scorecardReview={openScorecardReview}
             activeIndex={activeHoleIndex}
             roundLength={roundLength}
             editActivePlayers={() => toggleEditPlayersModal(true)}
-            endRound={()=> null}
+            endRound={() => null}
           />
           <Pagination
             count={state.activeLayout}
+            variant="outlined"
+            boundaryCount={2}
             page={activeHoleIndex}
             onChange={handlePaginationChange}
             className="navigation"
           />
-        </React.Fragment>
+        </div>
       )}
       {editPlayers ? (
         <InteractiveModal
@@ -187,6 +198,6 @@ export default function ScoreTracker(props) {
           <EditPLayers playerList={"active"} />
         </InteractiveModal>
       ) : null}
-    </div>
+    </React.Fragment>
   );
 }

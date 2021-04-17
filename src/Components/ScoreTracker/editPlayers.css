@@ -1,0 +1,17 @@
+.playerInput {
+  width: 55% !important;
+}
+
+.playerDiv {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.removePlayerButtonDiv {
+  margin-left: 2px;
+  align-self: center;
+}
+
+.removePlayerButtonDiv .btn {
+  padding: 0px 5px !important;
+}
