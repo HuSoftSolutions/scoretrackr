@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ReviewViewPlayerTable from "./roundTable";
 import PlayerIcon from "../../Icons_Images/playerIcon";
+import { useStore } from "./../../store";
+
 
 export default function ReviewView(props) {
+  const { state, dispatch } = useStore();
+
   return (
     <div className="reviewView_Div">
       <div
@@ -11,16 +15,16 @@ export default function ReviewView(props) {
       >
         Go back
       </div>
-      {props.roundData.players.map((playerName, index) => {
+      {state.activeScorecard.map((player, index) => {
         return (
           <div className="reviewView_PlayerDiv" key={index}>
             <div style={{ display: "flex" }}>
               {PlayerIcon("", 20)}{" "}
-              <h4 style={{ paddingLeft: "10px" }}>{playerName}</h4>
+              <h4 style={{ paddingLeft: "10px" }}>{player.name}</h4>
             </div>
             <div className="reviewView_TableDiv">
               <ReviewViewPlayerTable
-                player={playerName}
+                player={player}
                 scorecardInfo={props.roundData}
               />
             </div>

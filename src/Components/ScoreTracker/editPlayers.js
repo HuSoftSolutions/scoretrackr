@@ -10,25 +10,22 @@ export default function EditPlayers(props) {
   const { state, dispatch } = useStore();
 
   const onRemovePlayer = (target, playerIndex) => {
-    const newActivePlayers = state.activePlayers.filter(
+    const updatedScorecard = state.activeScorecard.filter(
       (player, index) => index !== playerIndex
     );
     dispatch({
-      type: "remove-active-players",
-      activePlayers: newActivePlayers,
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
     });
   };
 
   const onChangePlayerName = (value, index) => {
-    let newPlayers = state.activePlayers;
-    state.activePlayers.map((player, pIndex) => {
-      if (pIndex === index) {
-        newPlayers[index] = value;
-      }
-    });
+    let updatedScorecard = state.activeScorecard;
+    updatedScorecard[index] = {...updatedScorecard[index], 'name': value};
+    
     dispatch({
-      type: "update-active-players",
-      activePlayers: newPlayers,
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
     });
   };
 
@@ -57,7 +54,7 @@ export default function EditPlayers(props) {
       ) : null;
   };
 
-  const Player = (name, index, lastPlayerNotRemoved = false) => {
+  const Player = (player, index, lastPlayerNotRemoved = false) => {
     return (
       <div className="playerDiv" key={index}>
         <InputGroup.Prepend>
@@ -73,7 +70,7 @@ export default function EditPlayers(props) {
           placeholder="ex: John Doe"
           size="sm"
           name="playerName"
-          value={name}
+          value={player.name}
         />
         <div className="removePlayerButtonDiv" style={{marginLeft: '2px'}}>{removePlayerButton(index, lastPlayerNotRemoved)}</div>
       </div>
@@ -82,7 +79,7 @@ export default function EditPlayers(props) {
 
   const playerList = () => {
     if (props.playerList === "active") {
-      return state.activePlayers;
+      return state.activeScorecard;
     }
   };
   return (

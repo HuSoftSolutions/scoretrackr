@@ -6,8 +6,14 @@ import { useStore } from "./../../store";
 export default function HoleTracker(props) {
   const { state, dispatch } = useStore();
 
-  const updateScore = (playerName, score, hole) => {
-    props.updateScorecard(playerName, score, hole);
+  const updateScore = (playerIndex, score, hole) => {
+    let updatedScorecard = state.activeScorecard;
+
+    updatedScorecard[playerIndex].holes[hole] = score;
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
+    });
   };
 
   return (
@@ -38,15 +44,15 @@ export default function HoleTracker(props) {
             <h1>{hole}</h1>
           </div>
           <div>
-            {state.activePlayers.map((player, index) => {
+            {state.activeScorecard.map((player, index) => {
               return (
                 <PlayerScoreComponent
-                  name={player}
+                  name={player.name}
                   key={index}
+                  index={index}
                   hole={hole}
-                  scorecard={state.activeScorecard}
-                  setScore={(playerName, score) => {
-                    updateScore(playerName, score, hole);
+                  setScore={(playerIndex, score) => {
+                    updateScore(playerIndex, score, hole);
                   }}
                 />
               );

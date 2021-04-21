@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./index.css";
 import PlusIcon from "../../Icons_Images/plusIcon";
 import MinusIcon from "../../Icons_Images/minusIcon";
+import { useStore } from "./../../store";
+
 
 export default function PlayerScore(props) {
   const [score, setScore] = useState(0);
+  const { state, dispatch } = useStore();
+
 
   const decrementScore = () => {
     if (score > 0) {
@@ -15,17 +19,12 @@ export default function PlayerScore(props) {
   const updateScore = (change) => {
     let newScore = change === "increment" ? score + 1 : score - 1;
     setScore(newScore);
-    props.setScore(props.name, newScore);
+    props.setScore(props.index, newScore);
   };
 
   useEffect(function () {
-    if (
-      props.scorecard &&
-      props.scorecard[props.name] &&
-      props.scorecard[props.name][props.hole]
-    ) {
-      setScore(props.scorecard[props.name][props.hole]);
-    }
+    if (state.activeScorecard[props.index].holes[props.hole])
+      setScore(state.activeScorecard[props.index].holes[props.hole]);
   });
 
   return (

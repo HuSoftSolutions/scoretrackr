@@ -11,7 +11,8 @@ export default function CardDetails(props) {
   const { state, dispatch } = useStore();
 
   const updateCardDetails = (eventTarget, value) => {
-    const action = eventTarget.name;
+    const action = eventTarget.name,
+      updatedScorecard = state.activeScorecard;
     switch (action) {
       case "layoutSelection":
         dispatch({
@@ -20,10 +21,8 @@ export default function CardDetails(props) {
         });
         break;
       case "addPlayer":
-        dispatch({
-          type: "add-active-players",
-          newPlayer: "",
-        });
+        updatedScorecard.push({ name: "" });
+        updateScorecard(updatedScorecard);
         break;
       default:
         break;
@@ -31,28 +30,16 @@ export default function CardDetails(props) {
   };
 
   const playerInputHandler = (value, index) => {
-    let newPlayers = state.activePlayers;
-    state.activePlayers.map((player, pIndex) => {
-      if (pIndex === index) {
-        newPlayers[index] = value;
-      }
-    });
-    dispatch({
-      type: "update-active-players",
-      activePlayers: newPlayers,
-    });
+    let updatedScorecard = state.activeScorecard;
+    updatedScorecard[index] = { name: value };
+    updateScorecard(updatedScorecard);
   };
 
-  const validateActivePlayers = () => {
-    const players = state.activePlayers;
-    let validated = true;
-
-    players.map((player) => {
-      if (player.trim().length < 1) {
-        validated = false;
-      }
+  const updateScorecard = (newScorecard) => {
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: newScorecard,
     });
-    return validated;
   };
 
   const startRound = () => {
@@ -118,7 +105,7 @@ export default function CardDetails(props) {
         <Button
           type="button"
           variant="info"
-          disabled={!validateActivePlayers()}
+          disabled={!props.validateActivePlayers()}
           onClick={startRound}
         >
           Start Round
