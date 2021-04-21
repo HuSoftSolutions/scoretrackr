@@ -26,17 +26,14 @@ export default function ScoreTracker(props) {
   };
 
   const startRound = () => {
-    let roundLengthArray = [];
-    let newScorecard = {};
-    const players = state.activePlayers;
-    players.map((name) => {
-      newScorecard = {
-        ...newScorecard,
-        [name]: {},
-      };
-    });
+    let roundLengthArray = [],
+      newScorecard = state.activeScorecard;
+
     for (let i = 1; i <= state.activeLayout; i++) {
       roundLengthArray.push(i);
+      state.activeScorecard.map((player, index) => {
+        newScorecard[index]["holes"] = [];
+      });
     }
     setRoundLength(roundLengthArray);
     setRoundStart(true);
@@ -46,133 +43,111 @@ export default function ScoreTracker(props) {
     });
   };
 
-  const updateScorecard = (player, score, hole) => {
-    let newScorecard = state.activeScorecard;
-    if (newScorecard[player][hole]) {
-      newScorecard[player][hole] = score;
-    } else {
-      newScorecard[player] = {
-        ...newScorecard[player],
-        [hole]: score,
-      };
-    }
+  const getPlayerRoundTotals = () => {
+    let totalAddedScorecard = state.activeScorecard;
+    state.activeScorecard.map((player, index) => {
+      let totalCount = 0;
+      player.holes.map((hole) => {
+        totalCount += hole;
+      });
+      totalAddedScorecard[index]["total"] = totalCount;
+      debugger;
+    });
     dispatch({
       type: "update-active-scorecard",
-      scorecard: newScorecard,
+      scorecard: totalAddedScorecard,
     });
-  };
-
-  const getPlayerRoundTotals = () => {
-    let totals = {};
-    const scorecard = state.activeScorecard ? state.activeScorecard : {};
-    state.activePlayers.map((player) => {
-      let totalCount = 0,
-        rd1Out = null,
-        rd1In = null,
-        rd2Out = null,
-        rd2In = null;
-      roundLength.map((hole) => {
-        if (scorecard[player]) {
-          if (scorecard[player][hole] > 0) {
-            if (roundLength.length > 9) {
-              switch (true) {
-                case (hole < 10):
-                  rd1Out += scorecard[player][hole];
-                  break;
-                case (hole > 9 && hole < 19):
-                  rd1In += scorecard[player][hole];
-                  break;
-                case (hole > 18 && hole < 28):
-                  rd2Out += scorecard[player][hole];
-                  break;
-                case (hole > 27):
-                  rd2In += scorecard[player][hole];
-                  break;
-                default:
-                  break;
-              }
-            }
-            totalCount += scorecard[player][hole];
-          }
-        }
-      });
-      totals[player] = {
-        total: totalCount,
-      };
-      if (rd1Out) totals[player]["rd1OutTotal"] = rd1Out;
-      if (rd1In) totals[player]["rd1InTotal"] = rd1In;
-      if (rd2Out) totals[player]["rd2OutTotal"] = rd2Out;
-      if (rd2In) totals[player]["rd2InTotal"] = rd2In;
-    });
-    return totals;
   };
 
   const openScorecardReview = () => {
-    const totals = getPlayerRoundTotals(),
-      players = state.activePlayers,
-      scorecard = state.activeScorecard;
+    getPlayerRoundTotals();
     let reviewRoundLayout = [],
+      nineHoleSplit = [],
       inTrue_OutFalse = false;
-    for (let i = 1; i <= state.activeLayout; i++) {
-      if (state.activeLayout > 9) {
-        if (i % 9 == 0) {
-          reviewRoundLayout.push(i);
-          inTrue_OutFalse == false
-            ? reviewRoundLayout.push("OUT")
-            : reviewRoundLayout.push("IN");
-          inTrue_OutFalse = !inTrue_OutFalse;
-        } else reviewRoundLayout.push(i);
-      } else reviewRoundLayout.push(i);
+
+    if (!reviewViewRoundData) {
+      for (let i = 1; i <= state.activeLayout; i++) {
+        if (state.activeLayout > 9) {
+          if (i % 9 == 0) {
+            nineHoleSplit.push(i);
+            if (inTrue_OutFalse === false) {
+              nineHoleSplit.push("OUT");
+              reviewRoundLayout.push(nineHoleSplit);
+              nineHoleSplit = [];
+            } else {
+              nineHoleSplit.push("IN");
+              if (i == state.activeLayout) nineHoleSplit.push("Total");
+              reviewRoundLayout.push(nineHoleSplit);
+              nineHoleSplit = [];
+            }
+            inTrue_OutFalse = !inTrue_OutFalse;
+          } else nineHoleSplit.push(i);
+        } else {
+          nineHoleSplit.push(i);
+          if (i == state.activeLayout) {
+            nineHoleSplit.push("Total");
+            reviewRoundLayout.push(nineHoleSplit);
+          }
+        }
+      }
+      setReviewViewRoundData(reviewRoundLayout);
     }
-    setReviewViewRoundData({ scorecard, players, reviewRoundLayout, totals });
     toggleReviewView(true);
   };
 
   const addPlayer = () => {
+    let updatedScorecard = state.activeScorecard;
+    updatedScorecard.push({ name: "", "holes": [] });
     dispatch({
-      type: "add-active-players",
-      newPlayer: "",
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
     });
   };
 
   const validateActivePlayers = () => {
-    const players = state.activePlayers;
+    const scorecard = state.activeScorecard;
     let validated = true;
+    if (scorecard.length > 0) {
+      scorecard.map((player) => {
+        if (player.name.trim().length < 1) {
+          validated = false;
+        }
+      });
+    } else validated = false;
 
-    players.map((player) => {
-      if (player.trim().length < 1) {
-        validated = false;
-      }
-    });
     return validated;
   };
 
   return (
-    <div className="match_container">
+    <React.Fragment>
       {!roundStart ? (
-        <CardDetails startRound={startRound} />
+        <CardDetails
+          startRound={startRound}
+          validateActivePlayers={validateActivePlayers}
+        />
       ) : reviewView ? (
         <ReviewView
           roundData={reviewViewRoundData}
           closeReviewView={() => toggleReviewView(false)}
         />
       ) : (
-        <React.Fragment>
+        <div className="holeTrackerDiv">
           <HoleTracker
-            updateScorecard={updateScorecard}
             scorecardReview={openScorecardReview}
             activeIndex={activeHoleIndex}
             roundLength={roundLength}
             editActivePlayers={() => toggleEditPlayersModal(true)}
-            endRound={()=> null}
+            endRound={() => null}
           />
           <Pagination
             count={state.activeLayout}
+            variant="outlined"
+            boundaryCount={2}
             page={activeHoleIndex}
             onChange={handlePaginationChange}
             className="navigation"
           />
-        </React.Fragment>
+        </div>
       )}
       {editPlayers ? (
         <InteractiveModal
@@ -187,6 +162,6 @@ export default function ScoreTracker(props) {
           <EditPLayers playerList={"active"} />
         </InteractiveModal>
       ) : null}
-    </div>
+    </React.Fragment>
   );
 }

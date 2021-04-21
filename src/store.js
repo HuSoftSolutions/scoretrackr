@@ -3,9 +3,8 @@ import React, { createContext, useContext, useReducer } from "react";
 const StoreContext = createContext();
 const INITIAL_STATE = {
   allPlayers: null,
-  activePlayers: [""],
   activeLayout: 18,
-  activeScorecard: null,
+  activeScorecard: [],
 };
 
 const reducer = (state, action) => {
@@ -17,34 +16,14 @@ const reducer = (state, action) => {
         ...state,
         ...action.allPlayers,
       };
-
-    case "update-active-players":
-      console.log("[ACTIVE_PLAYER UPDATED]", action);
-      return {
-        ...state,
-        activePlayers: action.activePlayers,
-      };
-    case "add-active-players":
-      console.log("[ACTIVE_PLAYER ADDED]", action);
-      return {
-        ...state,
-        activePlayers: [...state.activePlayers, action.newPlayer],
-      };
-    case "remove-active-players":
-      console.log("[ACTIVE_PLAYER REMOVED]", action);
-      return {
-        ...state,
-        activePlayers: action.activePlayers,
-      };
-
     case "update-active-layout":
-      console.log("[ACTIVE_LAYOUT UPDATED]", action);
+      console.log("[ACTIVE_LAYOUT UPDATED]", action, state);
       return {
         ...state,
         activeLayout: action.activeLayout,
       };
     case "update-active-scorecard":
-      console.log("[ACTIVE_SCORECARD UPDATED]", action);
+      console.log("[ACTIVE_SCORECARD UPDATED]", action, state);
       return {
         ...state,
         activeScorecard: action.scorecard,

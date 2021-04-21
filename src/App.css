@@ -1,11 +1,23 @@
-.page-container {
+.page_container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: rgb(203, 206, 209);
+  justify-content: space-between;
 }
 
-.header {
-  background-color: darkgray;
-  padding: 1em;
+.header_container {
+  order: 1;
+}
+
+.body_container {
+  order: 2;
+  flex-grow: 2;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+}
+
+.footer_container {
+  order: 3;
 }

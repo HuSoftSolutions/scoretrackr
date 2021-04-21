@@ -1,18 +1,31 @@
-.reviewView_PlayerIcon {
-    display: flex;
+.reviewView_PlayerDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewView_Div {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  text-align: center;
+  margin: auto;
+}
+
+.reviewView_TableDiv {
 }
 
 .incompleteHole {
-    background-color: red;
-    color: black;
-    font-weight: 700;
-    text-align: center;
+  background-color: red;
+  color: black;
+  font-weight: 700;
+  text-align: center;
 }
 
 .tableHeaderWords {
-   font-size: 12px;
+  font-size: 12px;
 }
 
 .alignTextCenter {
-    text-align: center;
+  text-align: center;
 }

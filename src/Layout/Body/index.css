@@ -1,18 +1,11 @@
-.body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 1em;
-  background: inherit;
-  overflow: auto;
-  height: 100%;
-  position: relative;
-}
-
 .createScorecardButton {
   align-self: center;
   width: 30%;
   font-weight: bold;
   margin: auto;
   min-width: fit-content;
+}
+
+.createScorecardButtonDiv {
+  align-self: center;
 }

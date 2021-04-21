@@ -1,71 +1,56 @@
 .cardDetailsHeader {
-    background-color: darkgray;
-    text-align: center;
-    padding-bottom: 1px;
-    height: 10%;
-    min-height: 27px;
+  background-color: darkgray;
+  text-align: center;
+  padding-bottom: 1px;
+  height: 10%;
+  min-height: 27px;
 }
 
 .cardDetails {
-    margin: auto;
-    max-height: 85%;
-    border: darkGray 4px solid;
-    border-radius: 10px;
-    height: 65%;
-    min-height: 275px;
-    max-width: 300px;
-    position: relative;
+  border: darkGray 4px solid;
+  border-radius: 10px;
+  min-width: 300px;
+  align-self: center;
 }
 
 .cardDetailsForm {
-    padding-left: 1%;
-    padding-right: 1%;
-    height: 89%;
-    max-height: 270px;
-    overflow-y: auto;
+  padding-left: 1%;
+  padding-right: 1%;
+  height: 89%;
+  max-height: 270px;
+  overflow-y: auto;
 }
 
 .layoutPadding {
-    padding-top: 2px;
+  padding-top: 2px;
 }
 
 .startRoundButtonDiv {
-    width: 98%;
-    margin: auto;
-    margin-bottom: 2px;
+  width: 98%;
+  margin: auto;
+  margin-bottom: 2px;
 }
 
 .startRoundButtonDiv .btn {
-    width: 100%;
-    margin-top: 1px;
-}
-
-.playerInput {
-    width: 55% !important;
-}
-
-.playerDiv {
-    display: flex;
+  width: 100%;
+  margin-top: 1px;
 }
 
 .playerInputGroup {
-    max-height: 45%;
-    overflow-y: auto;
-}
-.addPlayerButton {
-    
+  max-height: 45%;
+  overflow-y: auto;
 }
 
- .holeAmountButtonGroup {
-    display: flex !important;
-    box-shadow: 0px 4px 10px #3e3d3d
+.holeAmountButtonGroup {
+  display: flex !important;
+  box-shadow: 0px 4px 10px #3e3d3d;
 }
 
 .holeAmountButtonGroup .btn-light {
-    color: #138496;
+  color: #138496;
 }
 
 .holeAmountButtonGroup .btn {
-    border: 1px solid #6f6f6ff5;
-    font-weight: bold;
+  border: 1px solid #6f6f6ff5;
+  font-weight: bold;
 }

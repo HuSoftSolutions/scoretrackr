@@ -9,10 +9,10 @@ import "./cardDetails.css";
 
 export default function CardDetails(props) {
   const { state, dispatch } = useStore();
-  const [validated, setValidation] = useState(false);
 
   const updateCardDetails = (eventTarget, value) => {
-    const action = eventTarget.name;
+    const action = eventTarget.name,
+      updatedScorecard = state.activeScorecard;
     switch (action) {
       case "layoutSelection":
         dispatch({
@@ -21,40 +21,25 @@ export default function CardDetails(props) {
         });
         break;
       case "addPlayer":
-        dispatch({
-          type: "add-active-players",
-          newPlayer: "",
-        });
-        setValidation(false);
+        updatedScorecard.push({ name: "" });
+        updateScorecard(updatedScorecard);
         break;
       default:
-          break;
+        break;
     }
   };
 
   const playerInputHandler = (value, index) => {
-    let newPlayers = state.activePlayers;
-    state.activePlayers.map((player, pIndex) => {
-      if (pIndex === index) {
-        newPlayers[index] = value;
-      }
-    });
-    dispatch({
-      type: "update-active-players",
-      activePlayers: newPlayers,
-    });
-    validationCheck(newPlayers);
+    let updatedScorecard = state.activeScorecard;
+    updatedScorecard[index] = { name: value };
+    updateScorecard(updatedScorecard);
   };
 
-  const validationCheck = (players) => {
-    let validated = true;
-
-    players.map((player) => {
-      if (player.trim().length < 1) {
-        validated = false;
-      }
+  const updateScorecard = (newScorecard) => {
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: newScorecard,
     });
-    setValidation(validated);
   };
 
   const startRound = () => {
@@ -103,7 +88,7 @@ export default function CardDetails(props) {
             />
           </div>
 
-          <EditPlayers cardDetails validate={validationCheck} playerList={"active"}/>
+          <EditPlayers cardDetails playerList={"active"} />
         </Form.Group>
       </Form>
       <div className="startRoundButtonDiv">
@@ -120,7 +105,7 @@ export default function CardDetails(props) {
         <Button
           type="button"
           variant="info"
-          disabled={!validated}
+          disabled={!props.validateActivePlayers()}
           onClick={startRound}
         >
           Start Round
