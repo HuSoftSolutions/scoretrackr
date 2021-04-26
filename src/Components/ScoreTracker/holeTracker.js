@@ -18,15 +18,12 @@ export default function HoleTracker(props) {
 
   return (
     <React.Fragment>
-      <div className="review_edit_finish_Div">
-        <h6 className="review_edit_finish" onClick={props.scorecardReview}>
+      <div className="review_edit_Div">
+        <h6 className="review_edit" onClick={props.scorecardReview}>
           Review Scorecard
         </h6>
-        <h6 className="review_edit_finish" onClick={props.editActivePlayers}>
+        <h6 className="review_edit" onClick={props.editActivePlayers}>
           Edit Players
-        </h6>
-        <h6 className="review_edit_finish" onClick={props.endRound}>
-          Finish Incomplete Round
         </h6>
       </div>
 

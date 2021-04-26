@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import ReviewViewPlayerTable from "./roundTable";
 import PlayerIcon from "../../Icons_Images/playerIcon";
+import InteractiveModal from "../Modals_Alerts/interactiveModal";
+import Leaderboard from "./leaderboard";
+
 import { useStore } from "./../../store";
 
 
 export default function ReviewView(props) {
   const { state, dispatch } = useStore();
+  const [showLeaderboard, toggleLeaderboard] = useState(false);
 
   return (
     <div className="reviewView_Div">
-      <div
-        style={{ alignSelf: "flex-end", marginRight: "20px" }}
-        onClick={() => props.closeReviewView()}
-      >
+      <div className="goBack" onClick={() => props.closeReviewView()}>
         Go back
       </div>
+      <h6 className="finish" onClick={()=> toggleLeaderboard(true)}>
+          Finish Incomplete Round
+        </h6>
       {state.activeScorecard.map((player, index) => {
         return (
           <div className="reviewView_PlayerDiv" key={index}>
@@ -31,6 +35,19 @@ export default function ReviewView(props) {
           </div>
         );
       })}
+      {showLeaderboard ?
+        <InteractiveModal
+          show={showLeaderboard}
+          optionalSecondButton={true}
+          optionalSecondButtonLabel={"Back"}
+          optionalSecondButtonHandler={() => toggleLeaderboard(false)}
+          okDisabled={false}
+          header={"Leaderboard"}
+          close={() => props.endRound()}
+        >
+          <Leaderboard/>
+        </InteractiveModal>
+: null}
     </div>
   );
 }

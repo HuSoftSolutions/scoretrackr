@@ -5,10 +5,11 @@ const INITIAL_STATE = {
   allPlayers: null,
   activeLayout: 18,
   activeScorecard: [],
+  roundStarted: false,
+  createNewScorecard: false,
 };
 
 const reducer = (state, action) => {
-
   switch (action.type) {
     case "fetch-all-players":
       console.log("[ALL_PLAYERS LOADED]", action);
@@ -27,6 +28,18 @@ const reducer = (state, action) => {
       return {
         ...state,
         activeScorecard: action.scorecard,
+      };
+    case "start-round":
+      console.log("[ROUND_STARTED]", action, state);
+      return {
+        ...state,
+        roundStarted: action.roundStarted,
+      };
+    case "create-new-scorecard":
+      console.log("[CREATE_NEW_SCORECARD]", action, state);
+      return {
+        ...state,
+        createNewScorecard: action.createNewScorecard,
       };
 
     default:

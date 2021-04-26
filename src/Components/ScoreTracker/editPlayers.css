@@ -15,3 +15,7 @@
 .removePlayerButtonDiv .btn {
   padding: 0px 5px !important;
 }
+
+.eightyPercentWidth {
+  width: 80% !important;
+}
