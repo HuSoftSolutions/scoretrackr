@@ -12,7 +12,6 @@ import "./scoreTracker.css";
 export default function ScoreTracker(props) {
   const { state, dispatch } = useStore();
   const [roundLength, setRoundLength] = useState();
-  const [roundStart, setRoundStart] = useState(false);
   const [activeHoleIndex, setActiveIndex] = useState(1);
 
   const [reviewView, toggleReviewView] = useState(false);
@@ -36,10 +35,28 @@ export default function ScoreTracker(props) {
       });
     }
     setRoundLength(roundLengthArray);
-    setRoundStart(true);
     dispatch({
       type: "update-active-scorecard",
       scorecard: newScorecard,
+    });
+    dispatch({
+      type: "start-round",
+      roundStarted: true,
+    });
+    
+  };
+
+  const endRound = () => {
+    //store active scorecard in DB
+    //add to pre-existingScorecard state
+    //clear active scorecard state
+    dispatch({
+      type: "start-round",
+      roundStarted: false,
+    });
+    dispatch({
+      type: "create-new-scorecard",
+      createNewScorecard: false,
     });
   };
 
@@ -97,7 +114,7 @@ export default function ScoreTracker(props) {
 
   const addPlayer = () => {
     let updatedScorecard = state.activeScorecard;
-    updatedScorecard.push({ name: "", "holes": [] });
+    updatedScorecard.push({ name: "", holes: [] });
     dispatch({
       type: "update-active-scorecard",
       scorecard: updatedScorecard,
@@ -120,7 +137,7 @@ export default function ScoreTracker(props) {
 
   return (
     <React.Fragment>
-      {!roundStart ? (
+      {state.createNewScorecard && !state.roundStarted ? (
         <CardDetails
           startRound={startRound}
           validateActivePlayers={validateActivePlayers}
@@ -129,6 +146,7 @@ export default function ScoreTracker(props) {
         <ReviewView
           roundData={reviewViewRoundData}
           closeReviewView={() => toggleReviewView(false)}
+          endRound={endRound}
         />
       ) : (
         <div className="holeTrackerDiv">
@@ -137,7 +155,6 @@ export default function ScoreTracker(props) {
             activeIndex={activeHoleIndex}
             roundLength={roundLength}
             editActivePlayers={() => toggleEditPlayersModal(true)}
-            endRound={() => null}
           />
           <Pagination
             count={state.activeLayout}
@@ -159,7 +176,7 @@ export default function ScoreTracker(props) {
           optionalSecondButtonHandler={() => addPlayer()}
           close={() => toggleEditPlayersModal(false)}
         >
-          <EditPLayers playerList={"active"} />
+          <EditPLayers playerList={"active"} largeInput />
         </InteractiveModal>
       ) : null}
     </React.Fragment>

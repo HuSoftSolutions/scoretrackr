@@ -21,8 +21,8 @@ export default function EditPlayers(props) {
 
   const onChangePlayerName = (value, index) => {
     let updatedScorecard = state.activeScorecard;
-    updatedScorecard[index] = {...updatedScorecard[index], 'name': value};
-    
+    updatedScorecard[index] = { ...updatedScorecard[index], name: value };
+
     dispatch({
       type: "update-active-scorecard",
       scorecard: updatedScorecard,
@@ -31,7 +31,7 @@ export default function EditPlayers(props) {
 
   const removePlayerButton = (index, lastPlayerNotRemoved) => {
     if (!lastPlayerNotRemoved) {
-      return (
+      return (<div className="removePlayerButtonDiv">
         <Button
           variant="outline-danger"
           size="sm"
@@ -40,9 +40,11 @@ export default function EditPlayers(props) {
         >
           X
         </Button>
+</div>
       );
     } else
       return index !== 0 ? (
+        <div className="removePlayerButtonDiv">
         <Button
           variant="outline-danger"
           size="sm"
@@ -51,28 +53,31 @@ export default function EditPlayers(props) {
         >
           X
         </Button>
+        </div>
       ) : null;
   };
 
   const Player = (player, index, lastPlayerNotRemoved = false) => {
     return (
       <div className="playerDiv" key={index}>
-        <InputGroup.Prepend>
-          <InputGroup.Text id="playerNames" style={{ padding: ".375rem" }}>
-            {PlayerIcon("")}
-          </InputGroup.Text>
-        </InputGroup.Prepend>
-        <Form.Control
-          className="playerInput"
-          onChange={({ target }) => onChangePlayerName(target.value, index)}
-          aria-describedby="playerNames"
-          aria-label="Username"
-          placeholder="ex: John Doe"
-          size="sm"
-          name="playerName"
-          value={player.name}
-        />
-        <div className="removePlayerButtonDiv" style={{marginLeft: '2px'}}>{removePlayerButton(index, lastPlayerNotRemoved)}</div>
+        {/* <div className="justifyCenter"> */}
+          <InputGroup.Prepend>
+            <InputGroup.Text id="playerNames" style={{ padding: ".375rem" }}>
+              {PlayerIcon("")}
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <Form.Control
+            className={`${props.largeInput ? "eightyPercentWidth" : "playerInput"}`}
+            onChange={({ target }) => onChangePlayerName(target.value, index)}
+            aria-describedby="playerNames"
+            aria-label="Username"
+            placeholder="ex: John Doe"
+            size="sm"
+            name="playerName"
+            value={player.name}
+          />
+        {/* </div> */}
+          {removePlayerButton(index, lastPlayerNotRemoved)}
       </div>
     );
   };

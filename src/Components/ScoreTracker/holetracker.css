@@ -10,22 +10,22 @@
   color: red;
 }
 
-.review_edit_finish_Div {
+.review_edit_Div {
   display: flex;
   justify-content: space-evenly;
 }
-.review_edit_finish {
+.review_edit {
   cursor: pointer;
   z-index: 100;
   text-align: end;
 }
 
-.review_edit_finish:hover {
+.review_edit:hover {
   text-decoration: underline;
   color: unset;
 }
 
-.review_edit_finish:focus {
+.review_edit:focus {
   text-decoration: underline;
   color: unset;
 }

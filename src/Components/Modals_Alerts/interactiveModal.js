@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useStore } from "./../../store";
-
-import EditPLayers from "../ScoreTracker/editPlayers";
+import "./modal.css";
 
 export default function InteractiveModal(props) {
   const { state, dispatch } = useStore();
@@ -14,10 +13,10 @@ export default function InteractiveModal(props) {
 
   return (
     <Modal show={props.show}>
-      <Modal.Header closeButton>
+      <Modal.Header className="justifyCenter" >
         <Modal.Title>{props.header}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{props.children}</Modal.Body>
+      <Modal.Body className="">{props.children}</Modal.Body>
       <Modal.Footer>
         {props.optionalSecondButton ? (
           <Button

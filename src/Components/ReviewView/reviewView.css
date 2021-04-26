@@ -12,7 +12,19 @@
   margin: auto;
 }
 
-.reviewView_TableDiv {
+.reviewView_Div .finish {
+  cursor: pointer;
+  width: fit-content;
+  align-self: center;
+}
+.reviewView_Div .finish:hover {
+  text-decoration: underline;
+}
+
+.reviewView_Div .goBack {
+  align-self: flex-end;
+  margin-right: 20px;
+  cursor: pointer;
 }
 
 .incompleteHole {

@@ -2,18 +2,26 @@ import React, { Component, useState } from "react";
 import { Button } from "react-bootstrap";
 import ScoreTracker from "../../Components/ScoreTracker/scoreTracker";
 import "./index.css";
+import { useStore } from "./../../store";
+
 
 const Body = () => {
-  const [createNewScorecard, setCreateScorecard] = useState(false);
+  const { state, dispatch } = useStore();
 
-  return createNewScorecard === false ? (
-    <div className="createScorecardButtonDiv">
+
+  return state.createNewScorecard === false ? (
+    <div className="alignCenter">
       <Button
-        className="createScorecardButton"
+        className="createScorecardButton alignCenter"
         variant="info"
         size="lg"
         type="button"
-        onClick={() => setCreateScorecard(true)}
+        onClick={() =>  {
+          dispatch({
+            type: "create-new-scorecard",
+            createNewScorecard: true,
+          });
+          }}
       >
         CREATE SCORECARD
       </Button>

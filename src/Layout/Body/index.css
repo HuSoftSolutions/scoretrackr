@@ -1,11 +1,14 @@
 .createScorecardButton {
-  align-self: center;
   width: 30%;
   font-weight: bold;
   margin: auto;
   min-width: fit-content;
 }
 
-.createScorecardButtonDiv {
+.alignCenter {
   align-self: center;
+}
+
+.justifyCenter {
+  justify-content: center !important;
 }
