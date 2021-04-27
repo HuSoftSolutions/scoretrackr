@@ -12,13 +12,17 @@
   margin: auto;
 }
 
-.reviewView_Div .finish {
+.reviewView_Div .Round {
   cursor: pointer;
   width: fit-content;
   align-self: center;
 }
-.reviewView_Div .finish:hover {
+.reviewView_Div .Round:hover {
   text-decoration: underline;
+}
+
+.reviewView_Div .Incomplete {
+  color: darkred;
 }
 
 .reviewView_Div .goBack {
