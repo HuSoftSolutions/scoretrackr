@@ -68,7 +68,6 @@ export default function ScoreTracker(props) {
         totalCount += hole;
       });
       totalAddedScorecard[index]["total"] = totalCount;
-      debugger;
     });
     dispatch({
       type: "update-active-scorecard",

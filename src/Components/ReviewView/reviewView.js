@@ -6,19 +6,33 @@ import Leaderboard from "./leaderboard";
 
 import { useStore } from "./../../store";
 
-
 export default function ReviewView(props) {
   const { state, dispatch } = useStore();
   const [showLeaderboard, toggleLeaderboard] = useState(false);
 
+  const roundValidated = () => {
+    let validated = true;
+    state.activeScorecard.map((player) => {
+      for (let i = 1; i <= state.activeLayout; i++) {
+            if (!player.holes[i] || player.holes[i] == 0) {
+              validated = false;
+            }
+      }
+    });
+    return validated;
+  };
+
+  let complete_IncompleteRound = roundValidated()
+    ? "Round"
+    : "Incomplete Round";
   return (
     <div className="reviewView_Div">
       <div className="goBack" onClick={() => props.closeReviewView()}>
         Go back
       </div>
-      <h6 className="finish" onClick={()=> toggleLeaderboard(true)}>
-          Finish Incomplete Round
-        </h6>
+      <h6 className={complete_IncompleteRound} onClick={() => toggleLeaderboard(true)}>
+        {`Finish ${complete_IncompleteRound}`}
+      </h6>
       {state.activeScorecard.map((player, index) => {
         return (
           <div className="reviewView_PlayerDiv" key={index}>
@@ -35,7 +49,7 @@ export default function ReviewView(props) {
           </div>
         );
       })}
-      {showLeaderboard ?
+      {showLeaderboard ? (
         <InteractiveModal
           show={showLeaderboard}
           optionalSecondButton={true}
@@ -45,9 +59,9 @@ export default function ReviewView(props) {
           header={"Leaderboard"}
           close={() => props.endRound()}
         >
-          <Leaderboard/>
+          <Leaderboard />
         </InteractiveModal>
-: null}
+      ) : null}
     </div>
   );
 }
