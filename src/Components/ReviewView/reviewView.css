@@ -45,3 +45,13 @@
 .alignTextCenter {
   text-align: center;
 }
+
+.leaderboard {
+  display: flex;
+    width: 40%;
+    margin: auto;
+}
+
+.leaderboard ol {
+  flex-grow: 2;
+}

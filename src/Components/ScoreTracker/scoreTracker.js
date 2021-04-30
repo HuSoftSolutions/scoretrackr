@@ -47,16 +47,8 @@ export default function ScoreTracker(props) {
   };
 
   const endRound = () => {
-    //store active scorecard in DB
-    //add to pre-existingScorecard state
-    //clear active scorecard state
     dispatch({
-      type: "start-round",
-      roundStarted: false,
-    });
-    dispatch({
-      type: "create-new-scorecard",
-      createNewScorecard: false,
+      type: "end-active-round",
     });
   };
 
@@ -130,7 +122,6 @@ export default function ScoreTracker(props) {
         }
       });
     } else validated = false;
-
     return validated;
   };
 
@@ -158,7 +149,8 @@ export default function ScoreTracker(props) {
           <Pagination
             count={state.activeLayout}
             variant="outlined"
-            boundaryCount={2}
+            boundaryCount={1}
+            siblingCount={0}
             page={activeHoleIndex}
             onChange={handlePaginationChange}
             className="navigation"
