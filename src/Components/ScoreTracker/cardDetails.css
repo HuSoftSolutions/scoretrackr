@@ -41,16 +41,16 @@
   overflow-y: auto;
 }
 
-.holeAmountButtonGroup {
+.cardDetailsButtonGroup {
   display: flex !important;
   box-shadow: 0px 4px 10px #3e3d3d;
 }
 
-.holeAmountButtonGroup .btn-light {
+.cardDetailsButtonGroup .btn-light {
   color: #138496;
 }
 
-.holeAmountButtonGroup .btn {
+.cardDetailsButtonGroup .btn {
   border: 1px solid #6f6f6ff5;
   font-weight: bold;
 }

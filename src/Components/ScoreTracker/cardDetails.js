@@ -24,6 +24,12 @@ export default function CardDetails(props) {
         updatedScorecard.push({ name: "" });
         updateScorecard(updatedScorecard);
         break;
+      case "matchType":
+        dispatch({
+          type: "update-active-match-type",
+          matchType: value,
+        });
+        break;
       default:
         break;
     }
@@ -46,6 +52,16 @@ export default function CardDetails(props) {
     props.startRound();
   };
 
+  const validateCardDetails = () => {
+    const playersValidated = props.validateActivePlayers(),
+      matchType = state.matchType;
+    let validated = playersValidated;
+
+    if (!matchType) validated = false;
+
+    return validated;
+  };
+
   const holeFormats = [9, 18, 27, 36];
   return (
     <div className="cardDetails">
@@ -55,7 +71,7 @@ export default function CardDetails(props) {
       <Form className="cardDetailsForm">
         <Form.Group className="layoutPadding">
           <Form.Label>Choose Hole Layout:</Form.Label>
-          <ButtonGroup size="sm" className="holeAmountButtonGroup">
+          <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             {holeFormats.map((holeAmount) => (
               <Button
                 name="layoutSelection"
@@ -66,6 +82,26 @@ export default function CardDetails(props) {
                 {holeAmount}H
               </Button>
             ))}
+          </ButtonGroup>
+        </Form.Group>
+        <Form.Group className="">
+          <ButtonGroup size="sm" className="cardDetailsButtonGroup">
+            <Button
+              name="matchType"
+              variant={"stroke" === state.matchType ? "info" : "light"}
+              onClick={({ target }) => updateCardDetails(target, "stroke")}
+              key={"strokePlay"}
+            >
+              Stroke Play
+            </Button>
+            <Button
+              name="matchType"
+              variant={"match" === state.matchType ? "info" : "light"}
+              onClick={({ target }) => updateCardDetails(target, "match")}
+              key={"matchPlay"}
+            >
+              Match Play
+            </Button>
           </ButtonGroup>
         </Form.Group>
         <Form.Label>Players:</Form.Label>
@@ -105,7 +141,7 @@ export default function CardDetails(props) {
         <Button
           type="button"
           variant="info"
-          disabled={!props.validateActivePlayers()}
+          disabled={!validateCardDetails()}
           onClick={startRound}
         >
           Start Round

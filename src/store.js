@@ -7,6 +7,8 @@ const INITIAL_STATE = {
   activeScorecard: [],
   roundStarted: false,
   createNewScorecard: false,
+  matchType: null,
+  existingScorecards: [],
 };
 
 const reducer = (state, action) => {
@@ -29,6 +31,12 @@ const reducer = (state, action) => {
         ...state,
         activeScorecard: action.scorecard,
       };
+    case "update-active-match-type":
+      console.log("[MATCH_TYPE UPDATED]", action, state);
+      return {
+        ...state,
+        matchType: action.matchType,
+      };
     case "start-round":
       console.log("[ROUND_STARTED]", action, state);
       return {
@@ -40,6 +48,19 @@ const reducer = (state, action) => {
       return {
         ...state,
         createNewScorecard: action.createNewScorecard,
+      };
+    case "end-active-round":
+      console.log("[ROUND_ENDED_RESET_ACTIVE_VALUES]", action, state);
+      let scorecards = state.existingScorecards;
+      scorecards.push(state.activeScorecard);
+      return {
+        ...state,
+        roundStarted: false,
+        createNewScorecard: false,
+        existingScorecards: scorecards,
+        activeScorecard: [],
+        activeLayout: 18,
+        matchType: null
       };
 
     default:

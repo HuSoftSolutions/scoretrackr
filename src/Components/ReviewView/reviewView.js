@@ -56,6 +56,7 @@ export default function ReviewView(props) {
           optionalSecondButtonLabel={"Back"}
           optionalSecondButtonHandler={() => toggleLeaderboard(false)}
           okDisabled={false}
+          okLabel={"End Round"}
           header={"Leaderboard"}
           close={() => props.endRound()}
         >

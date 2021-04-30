@@ -28,7 +28,7 @@ export default function InteractiveModal(props) {
         </Button> 
         ) : null}
         <Button variant="primary" onClick={handleClose} disabled={props.okDisabled}>
-          Done
+          {props.okLabel ? props.okLabel : "Done"}
         </Button>
       </Modal.Footer>
     </Modal>
