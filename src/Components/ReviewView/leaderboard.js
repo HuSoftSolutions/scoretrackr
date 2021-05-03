@@ -8,16 +8,15 @@ export default function Leaderboard(props) {
   }
   return (
     <div className="leaderboard">
-      <ol>
         {sortedScorecard.map((player, index) => {
+          let totalColor = index == 0 ? "Gold" : index == 1 ? "Silver" : index == 2 ? "bronze" : "red";
           return (
-            <li key={index}>
+            <div className="leaderboardDiv" key={index}>
               <span>{player.name}</span>
-              <span style={{float: "right"}}>{player.total}</span>
-            </li>
+              <span className="leaderboardTotalSpan Bold" style={{color: totalColor}}>{player.total}</span>
+            </div>
           );
         })}
-      </ol>
     </div>
   );
 }

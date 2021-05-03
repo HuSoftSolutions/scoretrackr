@@ -12,3 +12,11 @@
 .justifyCenter {
   justify-content: center !important;
 }
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.Bold {
+  font-weight: bold !important;
+}

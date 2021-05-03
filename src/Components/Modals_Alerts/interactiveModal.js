@@ -13,21 +13,22 @@ export default function InteractiveModal(props) {
 
   return (
     <Modal show={props.show}>
-      <Modal.Header className="justifyCenter" >
-        <Modal.Title>{props.header}</Modal.Title>
+      <Modal.Header className="textAlignCenter" style={{display: props.leaderboard ? "block" : ""}}>
+        <Modal.Title className="Bold">{props.header}</Modal.Title>
+        {props.leaderboard ? <div className="Bold" style={{fontSize: "small"}}>{state.matchType} Play</div> : null}
       </Modal.Header>
       <Modal.Body className="">{props.children}</Modal.Body>
       <Modal.Footer>
         {props.optionalSecondButton ? (
           <Button
           type="button"
-          variant="success"
+          variant={props.optionalSecondButtonLabel == "Back" ? "danger" : "primary"}
           onClick={()=>props.optionalSecondButtonHandler()}
         >
            {props.optionalSecondButtonLabel}
         </Button> 
         ) : null}
-        <Button variant="primary" onClick={handleClose} disabled={props.okDisabled}>
+        <Button variant="success" onClick={handleClose} disabled={props.okDisabled}>
           {props.okLabel ? props.okLabel : "Done"}
         </Button>
       </Modal.Footer>
