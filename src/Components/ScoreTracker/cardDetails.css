@@ -14,11 +14,7 @@
 }
 
 .cardDetailsForm {
-  padding-left: 1%;
-  padding-right: 1%;
-  height: 89%;
-  max-height: 270px;
-  overflow-y: auto;
+  display: contents;
 }
 
 .layoutPadding {
@@ -37,13 +33,27 @@
 }
 
 .playerInputGroup {
-  max-height: 45%;
-  overflow-y: auto;
+  overflow-y: scroll;
+  max-height: 145px;
+  margin: 0 0 0 15px;
+}
+
+.playerInputGroup::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(124, 124, 124);
+}
+
+.playerInputGroup::-webkit-scrollbar-thumb {
+  background-color: rgb(141, 141, 141);
+}
+
+.playerInputGroup::-webkit-scrollbar {
+  width: 0.5rem;
 }
 
 .cardDetailsButtonGroup {
   display: flex !important;
   box-shadow: 0px 4px 10px #3e3d3d;
+  margin: 0 15px;
 }
 
 .cardDetailsButtonGroup .btn-light {
@@ -53,4 +63,8 @@
 .cardDetailsButtonGroup .btn {
   border: 1px solid #6f6f6ff5;
   font-weight: bold;
+}
+
+.cardDetailsLabel {
+  margin-left: 5px;
 }

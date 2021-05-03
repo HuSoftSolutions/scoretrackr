@@ -70,7 +70,7 @@ export default function CardDetails(props) {
       </div>
       <Form className="cardDetailsForm">
         <Form.Group className="layoutPadding">
-          <Form.Label>Choose Hole Layout:</Form.Label>
+          <Form.Label className="cardDetailsLabel">Choose Hole Layout:</Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             {holeFormats.map((holeAmount) => (
               <Button
@@ -88,23 +88,23 @@ export default function CardDetails(props) {
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             <Button
               name="matchType"
-              variant={"stroke" === state.matchType ? "info" : "light"}
-              onClick={({ target }) => updateCardDetails(target, "stroke")}
+              variant={ state.matchType === "Stroke" ? "info" : "light"}
+              onClick={({ target }) => updateCardDetails(target, "Stroke")}
               key={"strokePlay"}
             >
               Stroke Play
             </Button>
             <Button
               name="matchType"
-              variant={"match" === state.matchType ? "info" : "light"}
-              onClick={({ target }) => updateCardDetails(target, "match")}
+              variant={ state.matchType === "Match" ? "info" : "light"}
+              onClick={({ target }) => updateCardDetails(target, "Match")}
               key={"matchPlay"}
             >
               Match Play
             </Button>
           </ButtonGroup>
         </Form.Group>
-        <Form.Label>Players:</Form.Label>
+        <Form.Label className="cardDetailsLabel">Players:</Form.Label>
         <Form.Group controlId="playersInput" className="playerInputGroup">
           <div className="playerDiv">
             <InputGroup.Prepend>

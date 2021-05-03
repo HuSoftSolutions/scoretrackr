@@ -57,7 +57,8 @@ export default function ReviewView(props) {
           optionalSecondButtonHandler={() => toggleLeaderboard(false)}
           okDisabled={false}
           okLabel={"End Round"}
-          header={"Leaderboard"}
+          header={"LEADERBOARD"}
+          leaderboard
           close={() => props.endRound()}
         >
           <Leaderboard />
