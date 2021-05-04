@@ -10,7 +10,6 @@ class Footer extends Component {
         {/* <a href="mailto:info@teefinder.com" className="mb-0">
                 cody.husek@husoftsolutions.com
               </a> */}
-        <br />
       </div>
     );
   }

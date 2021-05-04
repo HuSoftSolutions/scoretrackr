@@ -5,7 +5,7 @@ class Header extends Component {
   render() {
     return (
       <header className="header">
-        <h3>
+        <h3 style={{ paddingTop: "5px" }}>
           Welcome to <strong>ScoreTrackr</strong>
         </h3>
       </header>

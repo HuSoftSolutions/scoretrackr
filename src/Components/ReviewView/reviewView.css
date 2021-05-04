@@ -7,7 +7,7 @@
   flex-grow: 2;
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 90vw;
   text-align: center;
   margin: auto;
 }
@@ -27,8 +27,12 @@
 
 .reviewView_Div .goBack {
   align-self: flex-end;
-  margin-right: 20px;
   cursor: pointer;
+}
+
+.reviewView_PlayerParent_Div {
+  max-height: 65vh;
+  overflow-y: scroll;
 }
 
 .incompleteHole {
@@ -50,6 +54,10 @@
   width: 65%;
   margin: auto;
 }
+.stroke {
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 10px;
+}
 
 .leaderboardDiv {
   border: 1px lightgray solid;
@@ -59,7 +67,10 @@
   margin-bottom: 5px;
 }
 
+.extraPadding {
+  margin-bottom: 10px;
+}
+
 .leaderboardTotalSpan {
   float: right;
 }
-

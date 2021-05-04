@@ -1,0 +1,15 @@
+.modalBody {
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+
+.modalBody::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(124, 124, 124);
+}
+.modalBody::-webkit-scrollbar-thumb {
+  background-color: rgb(141, 141, 141);
+}
+
+.modalBody::-webkit-scrollbar {
+  width: 0.5rem;
+}

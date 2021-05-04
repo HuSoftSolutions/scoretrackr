@@ -17,7 +17,7 @@ export default function InteractiveModal(props) {
         <Modal.Title className="Bold">{props.header}</Modal.Title>
         {props.leaderboard ? <div className="Bold" style={{fontSize: "small"}}>{state.matchType} Play</div> : null}
       </Modal.Header>
-      <Modal.Body className="">{props.children}</Modal.Body>
+      <Modal.Body className="modalBody">{props.children}</Modal.Body>
       <Modal.Footer>
         {props.optionalSecondButton ? (
           <Button
