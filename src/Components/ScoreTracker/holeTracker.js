@@ -40,7 +40,7 @@ export default function HoleTracker(props) {
             <h4 className="holeStyle">HOLE</h4>
             <h1>{hole}</h1>
           </div>
-          <div>
+          <div className="playerScore_Div">
             {state.activeScorecard.map((player, index) => {
               return (
                 <PlayerScoreComponent

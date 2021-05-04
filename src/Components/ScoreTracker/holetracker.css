@@ -53,6 +53,11 @@
   flex-direction: column;
 }
 
+.playerScore_Div {
+  height: 50vh;
+    overflow-y: scroll;
+}
+
 .noDisplay {
   display: none;
 }

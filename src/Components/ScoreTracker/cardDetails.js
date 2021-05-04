@@ -70,7 +70,9 @@ export default function CardDetails(props) {
       </div>
       <Form className="cardDetailsForm">
         <Form.Group className="layoutPadding">
-          <Form.Label className="cardDetailsLabel">Choose Hole Layout:</Form.Label>
+          <Form.Label className="cardDetailsLabel">
+            Choose Hole Layout:
+          </Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             {holeFormats.map((holeAmount) => (
               <Button
@@ -88,7 +90,7 @@ export default function CardDetails(props) {
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             <Button
               name="matchType"
-              variant={ state.matchType === "Stroke" ? "info" : "light"}
+              variant={state.matchType === "Stroke" ? "info" : "light"}
               onClick={({ target }) => updateCardDetails(target, "Stroke")}
               key={"strokePlay"}
             >
@@ -96,9 +98,10 @@ export default function CardDetails(props) {
             </Button>
             <Button
               name="matchType"
-              variant={ state.matchType === "Match" ? "info" : "light"}
+              variant={state.matchType === "Match" ? "info" : "light"}
               onClick={({ target }) => updateCardDetails(target, "Match")}
               key={"matchPlay"}
+              disabled={state.activeScorecard.length < 2 ? true : false}
             >
               Match Play
             </Button>

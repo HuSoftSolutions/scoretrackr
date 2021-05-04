@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   activeScorecard: [],
   roundStarted: false,
   createNewScorecard: false,
-  matchType: null,
+  matchType: "Stroke",
   existingScorecards: [],
 };
 
