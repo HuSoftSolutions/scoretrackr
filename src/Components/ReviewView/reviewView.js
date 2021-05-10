@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useStore } from "./../../store";
 import ReviewViewPlayerTable from "./roundTable";
-import PlayerIcon from "../../Icons_Images/playerIcon";
+// import PlayerIcon from "../../Icons_Images/playerIcon";
+import Button from "react-bootstrap/Button";
 import InteractiveModal from "../Modals_Alerts/interactiveModal";
 import Leaderboard from "./leaderboard";
-
-import { useStore } from "./../../store";
 
 export default function ReviewView(props) {
   const { state, dispatch } = useStore();
@@ -30,31 +30,20 @@ export default function ReviewView(props) {
       <div className="goBack" onClick={() => props.closeReviewView()}>
         Go back
       </div>
-      <h6
-        className={complete_IncompleteRound}
+      {/* <h6
+        // className={complete_IncompleteRound}
         onClick={() => toggleLeaderboard(true)}
       >
-        {`Finish ${complete_IncompleteRound}`}
-      </h6>
+        Leaderboard
+      </h6> */}
       <div className="reviewView_PlayerParent_Div">
-        {state.activeScorecard.map((player, index) => {
-          return (
-            <div className="reviewView_PlayerDiv" key={index}>
-              <div style={{ display: "flex" }}>
-                {PlayerIcon("", 20)}{" "}
-                <h4 style={{ paddingLeft: "10px" }}>{player.name}</h4>
-              </div>
-              <div className="reviewView_TableDiv">
-                <ReviewViewPlayerTable
-                  player={player}
-                  scorecardInfo={props.roundData}
-                />
-              </div>
-            </div>
-          );
-        })}
+        <div className="reviewView_PlayerDiv">
+          <div className="reviewView_TableDiv">
+            <ReviewViewPlayerTable scorecardInfo={props.roundData} />
+          </div>
+        </div>
       </div>
-      {showLeaderboard ? (
+      {/* {showLeaderboard ? (
         <InteractiveModal
           show={showLeaderboard}
           optionalSecondButton={true}
@@ -68,7 +57,17 @@ export default function ReviewView(props) {
         >
           <Leaderboard />
         </InteractiveModal>
-      ) : null}
+      ) : null} */}
+      <div>
+        <Button
+          variant={roundValidated() ? "success" : "outline-danger"}
+          size="sm"
+          name="endRound"
+          onClick={() => props.endRound()}
+        >
+          {`Finish ${complete_IncompleteRound}`}
+        </Button>
+      </div>
     </div>
   );
 }

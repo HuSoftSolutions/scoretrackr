@@ -12,7 +12,7 @@
   margin: auto;
 }
 
-.reviewView_Div .Round {
+/* .reviewView_Div .Round {
   cursor: pointer;
   width: fit-content;
   align-self: center;
@@ -23,7 +23,7 @@
 
 .reviewView_Div .Incomplete {
   color: darkred;
-}
+} */
 
 .reviewView_Div .goBack {
   align-self: flex-end;
@@ -36,7 +36,7 @@
 }
 
 .incompleteHole {
-  background-color: red;
+  background-color: whitesmoke;
   color: black;
   font-weight: 700;
   text-align: center;

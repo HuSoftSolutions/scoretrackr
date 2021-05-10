@@ -1,30 +1,43 @@
 import React, { useState, useEffect } from "react";
+import { useStore } from "./../../store";
 import Table from "react-bootstrap/Table";
 import "./reviewView.css";
 
 export default function RoundTable(props) {
+  const { state, dispatch } = useStore();
+
   const PlayerScoreTableBody = (props) => {
-    if (props.props.player.holes[props.hole]) {
-      return <td key={props.hole}>{props.props.player.holes[props.hole]}</td>;
-    } else if (typeof props.hole == "string") {
-      if (props.hole == "OUT" || props.hole == "IN") {
-        let total = 0;
-        props.props.scorecardInfo[props.holeArrayIndex].map((hole) => {
-          if (props.props.player.holes[hole])
-            total += props.props.player.holes[hole];
-        });
-        return <td style={{ textAlign: "center" }}>{total}</td>;
-      } else {
+    // if (state.matchType === "Stroke") {
+      return state.activeScorecard.map((player) => {
         return (
-          <td style={{ textAlign: "center" }}>{props.props.player.total}</td>
+          <tr>
+            {props.holeArray.map((hole, index) => {
+              if (player.holes[hole]) {
+                return <td key={hole}>{player.holes[hole]}</td>;
+              } else if (hole == "OUT" || hole == "IN") {
+                let total = 0;
+                props.scorecardInfo[props.holeArrayIndex].map((holeIndex) => {
+                  if (player.holes[holeIndex]) total += player.holes[holeIndex];
+                });
+                return <td className="alignTextCenter">{total}</td>;
+              } else if (hole == "Hole") {
+                return <td className="alignTextCenter">{player.name}</td>;
+              } else if (hole == "Total") {
+                return <td className="alignTextCenter">{player.total}</td>;
+              } else
+                return (
+                  <td key={hole} className="incompleteHole">
+                    -
+                  </td>
+                );
+            })}
+          </tr>
         );
-      }
-    } else
-      return (
-        <td key={props.hole} className="incompleteHole">
-          -
-        </td>
-      );
+      });
+    // }
+    // else if (state.activeScorecard.length > 2) {
+
+    // }
   };
 
   const PlayerScoreTable = () => {
@@ -41,19 +54,11 @@ export default function RoundTable(props) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              {holeArray.map((hole, index) => {
-                return (
-                  <PlayerScoreTableBody
-                    hole={hole}
-                    holeArrayIndex={holeArrayIndex}
-                    index={index}
-                    props={props}
-                    key={hole}
-                  />
-                );
-              })}
-            </tr>
+            <PlayerScoreTableBody
+              holeArray={holeArray}
+              holeArrayIndex={holeArrayIndex}
+              scorecardInfo={props.scorecardInfo}
+            />
           </tbody>
         </Table>
       );
