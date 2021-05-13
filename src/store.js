@@ -60,7 +60,7 @@ const reducer = (state, action) => {
         existingScorecards: scorecards,
         activeScorecard: [],
         activeLayout: 18,
-        matchType: null
+        matchType: "Stroke"
       };
 
     default:

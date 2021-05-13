@@ -75,6 +75,7 @@ export default function ScoreTracker(props) {
 
     if (!reviewViewRoundData) {
       for (let i = 1; i <= state.activeLayout; i++) {
+        if (i == 1 || i == 10) nineHoleSplit.push("Hole");
         if (state.activeLayout > 9) {
           if (i % 9 == 0) {
             nineHoleSplit.push(i);
