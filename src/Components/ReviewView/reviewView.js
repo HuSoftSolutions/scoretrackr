@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useStore } from "./../../store";
 import ReviewViewPlayerTable from "./roundTable";
-// import PlayerIcon from "../../Icons_Images/playerIcon";
 import Button from "react-bootstrap/Button";
-import InteractiveModal from "../Modals_Alerts/interactiveModal";
-import Leaderboard from "./leaderboard";
+// import InteractiveModal from "../Modals_Alerts/interactiveModal";
+// import Leaderboard from "./leaderboard";
 
 export default function ReviewView(props) {
   const { state, dispatch } = useStore();
-  const [showLeaderboard, toggleLeaderboard] = useState(false);
+  // const [showLeaderboard, toggleLeaderboard] = useState(false);
 
   const roundValidated = () => {
     let validated = true;
@@ -30,12 +29,6 @@ export default function ReviewView(props) {
       <div className="goBack" onClick={() => props.closeReviewView()}>
         Go back
       </div>
-      {/* <h6
-        // className={complete_IncompleteRound}
-        onClick={() => toggleLeaderboard(true)}
-      >
-        Leaderboard
-      </h6> */}
       <div className="reviewView_PlayerParent_Div">
         <div className="reviewView_PlayerDiv">
           <div className="reviewView_TableDiv">

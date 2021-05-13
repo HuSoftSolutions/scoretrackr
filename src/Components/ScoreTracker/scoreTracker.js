@@ -86,7 +86,6 @@ export default function ScoreTracker(props) {
             } else {
               nineHoleSplit.push("IN");
               if (i == state.activeLayout) nineHoleSplit.push("Total");
-
               reviewRoundLayout.push(nineHoleSplit);
               nineHoleSplit = [];
             }
@@ -96,7 +95,6 @@ export default function ScoreTracker(props) {
           nineHoleSplit.push(i);
           if (i == state.activeLayout) {
             nineHoleSplit.push("Total");
-
             reviewRoundLayout.push(nineHoleSplit);
           }
         }
