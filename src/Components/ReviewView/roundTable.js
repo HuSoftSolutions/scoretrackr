@@ -80,16 +80,24 @@ export default function RoundTable(props) {
         }
       });
     }
+    let resultSet = {};
     switch (true) {
       case p1matchTotal < 0:
-        return state.activeScorecard.length === 2 ? `${Math.abs(p1matchTotal)} UP vv` : p1matchTotal;
-      case p1matchTotal > 0:
-        return state.activeScorecard.length === 2 ? `${Math.abs(p1matchTotal)} UP ^^` : "+" + p1matchTotal;
+        resultSet.color = 'red';
+          state.activeScorecard.length === 2 ? resultSet.display = `${Math.abs(p1matchTotal)} DN` : resultSet.display = p1matchTotal;
+          break;
+      case p1matchTotal > 0: 
+        resultSet.color = 'yellowgreen';
+        state.activeScorecard.length === 2 ? resultSet.display = `${Math.abs(p1matchTotal)} UP` : resultSet.display = "+" + p1matchTotal;
+        break;
       case p1matchTotal === "":
-        return p1matchTotal;
+        resultSet.display = p1matchTotal;
+        break;
       default:
-        return "AS";
+        resultSet.display = "AS";
+        break;
     }
+    return resultSet;
   };
 
   const StrokePlayTableBody = (props) => {
@@ -101,23 +109,20 @@ export default function RoundTable(props) {
               if (player.holes[hole]) {
                 return <td key={hole}>{player.holes[hole]}</td>;
               } else if (hole == "OUT" || hole == "IN") {
-                let total = getNineHoleTotal(
-                  props.scorecardInfo,
-                  props.holeArrayIndex,
-                  player
-                );
-                return <td className="alignTextCenter">{total}</td>;
+                  let total = getNineHoleTotal(props.scorecardInfo, props.holeArrayIndex, player);
+                  return <td className="alignTextCenter">{total}</td>;
               } else if (hole == "Hole") {
-                return <td className="alignTextCenter">{player.name}</td>;
+                  return <td className="alignTextCenter">{player.name}</td>;
               } else if (hole == "Total") {
-                return <td className="alignTextCenter">{player.total}</td>;
+                  return <td className="alignTextCenter">{player.total}</td>;
               } else
-                return (
-                  <td key={hole} className="incompleteHole">
-                    -
-                  </td>
-                );
-            })}
+                  return (
+                    <td key={hole} className="incompleteHole">
+                      -
+                    </td>
+                  );
+              }
+            )}
           </tr>
           {state.matchType !== "Stroke" &&
           state.activeScorecard.length === 2 &&
@@ -135,7 +140,7 @@ export default function RoundTable(props) {
                       : props.holeArrayIndex === 2
                       ? 27
                       : 36;
-                  let total = getMatchPlayResultByHoleForTwo(
+                  let results = getMatchPlayResultByHoleForTwo(
                     lastHole,
                     props.scorecardInfo,
                     props.holeArrayIndex,
@@ -146,11 +151,10 @@ export default function RoundTable(props) {
                     <td
                       className="alignTextCenter"
                       style={{
-                        color:
-                          total != "" && total != "AS" ? "yellowgreen" : "",
+                        color: results.color ? results.color : ''
                       }}
                     >
-                      {total}
+                      {results.display}
                     </td>
                   );
                 } else if (hole == "Total") {
@@ -166,13 +170,10 @@ export default function RoundTable(props) {
                     <td
                       className="alignTextCenter"
                       style={{
-                        color:
-                          holeResult != "" && holeResult != "AS"
-                            ? "yellowgreen"
-                            : "",
+                        color: holeResult.color ? holeResult.color : ''
                       }}
                     >
-                      {holeResult}
+                      {holeResult.display}
                     </td>
                   );
                 } else {
@@ -187,13 +188,10 @@ export default function RoundTable(props) {
                     <td
                       className="alignTextCenter"
                       style={{
-                        color:
-                          holeResult != "" && holeResult != "AS"
-                            ? "yellowgreen"
-                            : "",
+                        color: holeResult.color ? holeResult.color : ''
                       }}
                     >
-                      {holeResult}
+                      {holeResult.display}
                     </td>
                   );
                 }
@@ -208,7 +206,7 @@ export default function RoundTable(props) {
   const PlayerScoreTables = () => {
     return props.scorecardInfo.map((holeArray, holeArrayIndex) => {
       return (
-        <Table striped bordered hover variant="dark" key={holeArrayIndex}>
+        <Table striped bordered hover variant="dark" size="sm" key={holeArrayIndex}>
           <thead>
             <tr>
               {holeArray.map((hole) => (
@@ -248,7 +246,7 @@ export default function RoundTable(props) {
     return matchCard.map((matchup) => {
       return props.scorecardInfo.map((holeArray, holeArrayIndex) => {
         return (
-          <Table striped bordered hover variant="dark" key={holeArrayIndex}>
+          <Table striped bordered hover variant="dark" size="sm" key={holeArrayIndex}>
             <thead>
               <tr>
                 <th>{matchup.name}</th>
@@ -296,13 +294,10 @@ export default function RoundTable(props) {
                           className="alignTextCenter"
                           key={hole}
                           style={{
-                            color:
-                              holeScore != "" && holeScore != "AS"
-                                ? holeScore < 0 ? "red" : "yellowgreen"
-                                : "",
+                              color: holeScore.color ? holeScore.color : ''
                           }}
                         >
-                          {holeScore}
+                          {holeScore.display}
                         </td>
                       );
                     }
@@ -334,12 +329,9 @@ export default function RoundTable(props) {
 											);
                       return (
                         <td style={{
-													color:
-													matchScore != "" && matchScore != "AS"
-															? matchScore < 0 ? "red" : "yellowgreen"
-															: "",
+                          color: matchScore.color ? matchScore.color : ''
 												}}>
-                          {matchScore}
+                          {matchScore.display}
                         </td>
                       );
                     default:
