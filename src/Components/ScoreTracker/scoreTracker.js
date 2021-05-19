@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import CardDetails from "./cardDetails";
 import HoleTracker from "./holeTracker";
 import ReviewView from "../ReviewView/reviewView";
 import InteractiveModal from "../Modals_Alerts/interactiveModal";
 import EditPLayers from "../ScoreTracker/editPlayers";
 import Pagination from "@material-ui/lab/Pagination";
-import { useStore } from "./../../store";
+import {useStore} from "./../../store";
 
 import "./scoreTracker.css";
 
 export default function ScoreTracker(props) {
-  const { state, dispatch } = useStore();
+  const {state, dispatch} = useStore();
   const [roundLength, setRoundLength] = useState();
   const [activeHoleIndex, setActiveIndex] = useState(1);
 
@@ -43,7 +43,6 @@ export default function ScoreTracker(props) {
       type: "start-round",
       roundStarted: true,
     });
-    
   };
 
   const endRound = () => {
@@ -106,7 +105,7 @@ export default function ScoreTracker(props) {
 
   const addPlayer = () => {
     let updatedScorecard = state.activeScorecard;
-    updatedScorecard.push({ name: "", holes: [] });
+    updatedScorecard.push({name: "", holes: []});
     dispatch({
       type: "update-active-scorecard",
       scorecard: updatedScorecard,

@@ -30,6 +30,12 @@ export default function CardDetails(props) {
           matchType: value,
         });
         break;
+        case "autoPress":
+          dispatch({
+            type: "update-auto-press",
+            autoPress: value,
+          });
+          break;
       default:
         break;
     }
@@ -70,9 +76,7 @@ export default function CardDetails(props) {
       </div>
       <Form className="cardDetailsForm">
         <Form.Group className="layoutPadding">
-          <Form.Label className="cardDetailsLabel">
-            Choose Hole Layout:
-          </Form.Label>
+          <Form.Label className="cardDetailsLabel"> Choose Hole Layout: </Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             {holeFormats.map((holeAmount) => (
               <Button
@@ -87,6 +91,7 @@ export default function CardDetails(props) {
           </ButtonGroup>
         </Form.Group>
         <Form.Group className="">
+          <Form.Label className="cardDetailsLabel"> Choose Hole Layout: </Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             <Button
               name="matchType"
@@ -105,7 +110,17 @@ export default function CardDetails(props) {
             >
               Match Play
             </Button>
+            <Button
+              name="matchType"
+              variant={state.matchType === "Nassau" ? "info" : "light"}
+              onClick={({ target }) => updateCardDetails(target, "Nassau")}
+              key={"NassauPlay"}
+              disabled={state.activeScorecard.length < 2 ? true : false}
+            >
+              Nassau Play
+            </Button>
           </ButtonGroup>
+          {state.matchType === "Nassau" ? <Form.Check type="checkbox" label="auto presses" name="autoPress" className="autoPressCheckbox" onChange={({target})=>  updateCardDetails(target, !state.autoPress)} /> : null}
         </Form.Group>
         <Form.Label className="cardDetailsLabel">Players:</Form.Label>
         <Form.Group controlId="playersInput" className="playerInputGroup">
@@ -115,7 +130,6 @@ export default function CardDetails(props) {
                 {PlayerIcon("")}
               </InputGroup.Text>
             </InputGroup.Prepend>
-
             <Form.Control
               aria-label="Username"
               placeholder="ex: John Doe"
@@ -128,6 +142,7 @@ export default function CardDetails(props) {
           </div>
 
           <EditPlayers cardDetails playerList={"active"} />
+
         </Form.Group>
       </Form>
       <div className="startRoundButtonDiv">

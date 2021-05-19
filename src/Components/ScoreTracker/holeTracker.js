@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./holetracker.css";
 import PlayerScoreComponent from "../Player/index";
 import { useStore } from "./../../store";
+import "./holetracker.css";
 
 export default function HoleTracker(props) {
   const { state, dispatch } = useStore();
@@ -14,6 +14,23 @@ export default function HoleTracker(props) {
       type: "update-active-scorecard",
       scorecard: updatedScorecard,
     });
+  };
+
+  const checkPressAbility = (playerIndex, hole) => {
+    let ableToPress = true;
+    const currentPlayerScore = state.activeScorecard[playerIndex].holes[hole];
+
+    state.activeScorecard.map((player, index) => {
+      if (playerIndex !== index) {
+        if (player.holes[hole] && currentPlayerScore) {
+          if (player.holes[hole] >= currentPlayerScore) {
+            ableToPress = false;
+          }
+        }
+        else ableToPress = false;
+      }
+    });
+    return ableToPress;
   };
 
   return (
@@ -48,6 +65,7 @@ export default function HoleTracker(props) {
                   key={index}
                   index={index}
                   hole={hole}
+                  ableToPress={checkPressAbility(index, hole)}
                   setScore={(playerIndex, score) => {
                     updateScore(playerIndex, score, hole);
                   }}

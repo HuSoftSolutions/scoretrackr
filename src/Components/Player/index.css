@@ -12,6 +12,10 @@
   min-height: 52px;
 }
 
+.playerContainer {
+  display: flex;
+}
+
 .plName {
   margin-bottom: 0px;
   margin-left: 1em;

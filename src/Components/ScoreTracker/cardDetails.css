@@ -54,6 +54,7 @@
   display: flex !important;
   box-shadow: 0px 4px 10px #3e3d3d;
   margin: 0 15px;
+  border-radius: 4px;
 }
 
 .cardDetailsButtonGroup .btn-light {
@@ -61,10 +62,15 @@
 }
 
 .cardDetailsButtonGroup .btn {
-  border: 1px solid #6f6f6ff5;
+  border: 1px solid #6f6f6ff5 !important;
   font-weight: bold;
 }
 
 .cardDetailsLabel {
   margin-left: 5px;
+}
+
+.autoPressCheckbox {
+  margin: 10px;
+  float: right;
 }

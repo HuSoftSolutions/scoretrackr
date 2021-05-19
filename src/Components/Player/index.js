@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "./index.css";
+import React, {useState, useEffect} from "react";
 import PlusIcon from "../../Icons_Images/plusIcon";
 import MinusIcon from "../../Icons_Images/minusIcon";
-import { useStore } from "./../../store";
-
+import Button from "react-bootstrap/Button";
+import {useStore} from "./../../store";
+import "./index.css";
 
 export default function PlayerScore(props) {
-  const [score, setScore] = useState(0);
-  const { state, dispatch } = useStore();
+  const {state, dispatch} = useStore();
 
+  const [score, setScore] = useState(0);
 
   const decrementScore = () => {
     if (score > 0) {
@@ -28,13 +28,15 @@ export default function PlayerScore(props) {
   });
 
   return (
-    <div className="plContainer">
-      <p className="plName">{props.name}</p>
-      <div className="scoreIncrementDiv">
-        <div onClick={decrementScore}>{MinusIcon("scoreButton")}</div>
-        <p className="playerScore">{score > 0 ? score : "-"}</p>
-        <div onClick={() => updateScore("increment")}>
-          {PlusIcon("scoreButton")}
+    <div className="playerContainer" key={props.index}>
+      <div className="plContainer">
+        <p className="plName">{props.name}</p>
+        <div className="scoreIncrementDiv">
+          <div onClick={decrementScore}>{MinusIcon("scoreButton")}</div>
+          <p className="playerScore">{score > 0 ? score : "-"}</p>
+          <div onClick={() => updateScore("increment")}>
+            {PlusIcon("scoreButton")}
+          </div>
         </div>
       </div>
     </div>
