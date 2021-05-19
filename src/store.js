@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   createNewScorecard: false,
   matchType: "Stroke",
   existingScorecards: [],
+  autoPress: false,
 };
 
 const reducer = (state, action) => {
@@ -62,7 +63,12 @@ const reducer = (state, action) => {
         activeLayout: 18,
         matchType: "Stroke"
       };
-
+    case "update-auto-press":
+      console.log("[TOGGLE_AUTO_PRESS]", action, state);
+      return {
+        ...state,
+        autoPress: action.autoPress,
+      };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
