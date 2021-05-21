@@ -1,10 +1,173 @@
 import React, {useState, useEffect} from "react";
 import {useStore} from "./../../store";
 import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+
 import "./reviewView.css";
 
 export default function RoundTable(props) {
   const {state, dispatch} = useStore();
+
+  const pressingValidated = (
+    twoPlayer,
+    presserIndex,
+    presseeIndex,
+    holeArray
+  ) => {
+    const lastHoleCompleted = getLastHoleCompleted();
+    let presserScore = 0,
+      presseeScore = 0,
+      validated,
+      presser = presserIndex,
+      pressee = presseeIndex;
+
+    if (holeArray.includes(lastHoleCompleted)) {
+      if (twoPlayer) {
+        state.activeScorecard.map((player, index) => {
+          if (index === presserIndex) {
+            presserScore = player.holes[lastHoleCompleted];
+          } else {
+            presseeScore = player.holes[lastHoleCompleted];
+            pressee = index;
+          }
+        });
+      } else {
+        presserScore =
+          state.activeScorecard[presserIndex].holes[lastHoleCompleted];
+        presseeScore =
+          state.activeScorecard[presseeIndex].holes[lastHoleCompleted];
+      }
+      let comparison = presserScore - presseeScore;
+
+      switch (true) {
+        case comparison < 0 && twoPlayer:
+          validated = false;
+          break;
+        case comparison > 0 && twoPlayer:
+          validated = true;
+          break;
+        case comparison < 0 && !twoPlayer:
+          presser = presseeIndex;
+          pressee = presserIndex;
+          validated = true;
+          break;
+        case comparison > 0 && !twoPlayer:
+          validated = true;
+          break;
+        default:
+          validated = false;
+          break;
+      }
+
+      if (validated) {
+        let alreadyPressedHole = existingPressesCheck(presser, pressee, true);
+        if (alreadyPressedHole) validated = false;
+      }
+    }
+    return validated;
+  };
+
+  const getLastHoleCompleted = () => {
+    let lastHole = 0,
+      holeComplete = true;
+
+    for (let i = 1; i <= state.activeLayout; i++) {
+      state.activeScorecard.map((player) => {
+        if (!player.holes[i]) {
+          if (holeComplete) {
+            lastHole = i - 1;
+            holeComplete = false;
+          }
+        }
+      });
+    }
+    return lastHole;
+  };
+
+  const getEndHole = (holeArrayIndex) => {
+    return holeArrayIndex === 0
+      ? 9
+      : holeArrayIndex === 1
+      ? 18
+      : holeArrayIndex === 2
+      ? 27
+      : 36;
+  };
+
+  const existingPressesCheck = (
+    firstPlayerIndex,
+    secondPlayerIndex,
+    validation
+  ) => {
+    const lastHoleCompleted = getLastHoleCompleted();
+    if (state.activeScorecard[firstPlayerIndex].presses) {
+      if (validation) {
+        let alreadyPressed = state.activeScorecard[
+          firstPlayerIndex
+        ].presses.filter(
+          (press) =>
+            press.startingHole === lastHoleCompleted + 1 &&
+            press.presseeIndex == secondPlayerIndex
+        );
+        if (alreadyPressed.length > 0) {
+          return true;
+        } else return false;
+      } else return true;
+    } else return false;
+  };
+
+  const pressingButtonHandler = (twoPlayer, presserIndex, presseeIndex) => {
+    const lastHoleCompleted = getLastHoleCompleted();
+    let pressee = presseeIndex,
+      presser = presserIndex;
+    if (twoPlayer) {
+      state.activeScorecard.map((player, index) => {
+        if (index !== presserIndex) {
+          pressee = index;
+        }
+      });
+    } else {
+      let firstPlayerScore =
+          state.activeScorecard[presserIndex].holes[lastHoleCompleted],
+        secondPlayerScore =
+          state.activeScorecard[presseeIndex].holes[lastHoleCompleted];
+      let comparison = firstPlayerScore - secondPlayerScore;
+      if (comparison < 0) {
+        presser = presseeIndex;
+        pressee = presserIndex;
+      }
+    }
+    setPress(presser, pressee);
+  };
+
+  const setPress = (pressingPlayerIndex, presseeIndex) => {
+    const lastHoleCompleted = getLastHoleCompleted();
+    let updatedScorecard = [...state.activeScorecard];
+
+    const existingPresses = existingPressesCheck(
+      pressingPlayerIndex,
+      presseeIndex
+    );
+    const newPressName = `${updatedScorecard[pressingPlayerIndex].name} - Press`;
+    const newPress = {
+      pressName: newPressName,
+      startingHole: lastHoleCompleted + 1,
+      presseeIndex,
+      presserIndex: pressingPlayerIndex,
+    };
+
+    if (existingPresses) {
+      updatedScorecard[pressingPlayerIndex].presses.push(newPress);
+    } else {
+      updatedScorecard[pressingPlayerIndex].presses = [];
+      updatedScorecard[pressingPlayerIndex].presses.push(newPress);
+    }
+
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
+    });
+  };
 
   const getNineHoleTotal = (
     scorecardInfo,
@@ -14,33 +177,25 @@ export default function RoundTable(props) {
     matchup
   ) => {
     let total = 0;
-    let lastHole =
-      holeArrayIndex === 0
-        ? 9
-        : holeArrayIndex === 1
-        ? 18
-        : holeArrayIndex === 2
-        ? 27
-        : 36;
+    const lastHole = getEndHole(holeArrayIndex);
     if (!matchPlay) {
       scorecardInfo[holeArrayIndex].map((holeIndex) => {
         if (player.holes[holeIndex]) total += player.holes[holeIndex];
       });
       return total;
     } else {
-      debugger;
-      let presses = player;
-      let standardScore = getMatchPlayResultByHoleForTwo(
-        lastHole,
-        scorecardInfo,
-        holeArrayIndex,
-        matchup.firstPlayerIndex,
-        matchup.secondPlayerIndex,
-        false,
-        true,
-        null,
-        true
-      );
+      const presses = player,
+        standardScore = getMatchPlayResultByHoleForTwo(
+          lastHole,
+          scorecardInfo,
+          holeArrayIndex,
+          matchup.firstPlayerIndex,
+          matchup.secondPlayerIndex,
+          false,
+          true,
+          null,
+          true
+        );
       total += standardScore;
       if (presses.length > 0) {
         presses.map((press) => {
@@ -63,7 +218,6 @@ export default function RoundTable(props) {
                 press.startingHole,
                 true
               );
-              debugger;
               total += pressScore;
             }
           }
@@ -113,7 +267,7 @@ export default function RoundTable(props) {
               state.activeScorecard[firstPlayerIndex].holes[holeIndex] &&
               state.activeScorecard[secondPlayerIndex].holes[holeIndex]
             ) {
-              let comparison =
+              const comparison =
                 state.activeScorecard[firstPlayerIndex].holes[holeIndex] -
                 state.activeScorecard[secondPlayerIndex].holes[holeIndex];
               if (pressStart) {
@@ -167,7 +321,7 @@ export default function RoundTable(props) {
                   lastHole = 36;
                   break;
               }
-              let pressResults = getMatchPlayResultByHoleForTwo(
+              const pressResults = getMatchPlayResultByHoleForTwo(
                 lastHole,
                 scorecardInfo,
                 arrayIndex,
@@ -254,6 +408,19 @@ export default function RoundTable(props) {
     } else return p1matchTotal;
   };
 
+  const TableCell = (props) => {
+    return (
+      <td
+        className="alignTextCenter"
+        style={{
+          color: props.cellDetails.color ? props.cellDetails.color : "",
+        }}
+      >
+        {props.cellDetails.display}
+      </td>
+    );
+  };
+
   const StrokePlayTableBody = (props) => {
     return state.activeScorecard.map((player, playerIndex) => {
       const presses =
@@ -274,7 +441,28 @@ export default function RoundTable(props) {
                 );
                 return <td className="alignTextCenter">{total}</td>;
               } else if (hole == "Hole") {
-                return <td className="alignTextCenter">{player.name}</td>;
+                return (
+                  <td className="alignTextCenter tableHeader">
+                    {state.matchType === "Nassau" &&
+                    state.activeScorecard.length === 2 &&
+                    pressingValidated(
+                      true,
+                      playerIndex,
+                      null,
+                      props.holeArray
+                    ) ? (
+                      <Button
+                        variant="success"
+                        size="sm"
+                        style={{margin: "10px"}}
+                        onClick={() => pressingButtonHandler(true, playerIndex)}
+                      >
+                        Press
+                      </Button>
+                    ) : null}
+                    {player.name}
+                  </td>
+                );
               } else if (hole == "Total") {
                 return <td className="alignTextCenter">{player.total}</td>;
               } else
@@ -293,41 +481,25 @@ export default function RoundTable(props) {
                       {props.holeArray.map((hole, index) => {
                         if (hole == "Hole") {
                           return (
-                            <td className="alignTextCenter">
+                            <td className="alignTextCenter tableHeader">
                               {press.pressName}
                             </td>
                           );
                         } else if (hole == "OUT" || hole == "IN") {
-                          let lastHole =
-                            props.holeArrayIndex === 0
-                              ? 9
-                              : props.holeArrayIndex === 1
-                              ? 18
-                              : props.holeArrayIndex === 2
-                              ? 27
-                              : 36;
-                          let results = getMatchPlayResultByHoleForTwo(
-                            lastHole,
-                            props.scorecardInfo,
-                            props.holeArrayIndex,
-                            0,
-                            1,
-                            false,
-                            true,
-                            press.startingHole
-                          );
-                          return (
-                            <td
-                              className="alignTextCenter"
-                              style={{
-                                color: results.color ? results.color : "",
-                              }}
-                            >
-                              {results.display}
-                            </td>
-                          );
+                          const lastHole = getEndHole(props.holeArrayIndex),
+                            results = getMatchPlayResultByHoleForTwo(
+                              lastHole,
+                              props.scorecardInfo,
+                              props.holeArrayIndex,
+                              0,
+                              1,
+                              false,
+                              true,
+                              press.startingHole
+                            );
+                          return <TableCell cellDetails={results} />;
                         } else if (hole == "Total") {
-                          let holeResult = getMatchPlayResultByHoleForTwo(
+                          const holeResult = getMatchPlayResultByHoleForTwo(
                             hole,
                             props.scorecardInfo,
                             props.holeArrayIndex,
@@ -337,18 +509,9 @@ export default function RoundTable(props) {
                             false,
                             press.startingHole
                           );
-                          return (
-                            <td
-                              className="alignTextCenter"
-                              style={{
-                                color: holeResult.color ? holeResult.color : "",
-                              }}
-                            >
-                              {holeResult.display}
-                            </td>
-                          );
+                          return <TableCell cellDetails={holeResult} />;
                         } else {
-                          let holeResult = getMatchPlayResultByHoleForTwo(
+                          const holeResult = getMatchPlayResultByHoleForTwo(
                             hole,
                             props.scorecardInfo,
                             props.holeArrayIndex,
@@ -358,16 +521,7 @@ export default function RoundTable(props) {
                             false,
                             press.startingHole
                           );
-                          return (
-                            <td
-                              className="alignTextCenter"
-                              style={{
-                                color: holeResult.color ? holeResult.color : "",
-                              }}
-                            >
-                              {holeResult.display}
-                            </td>
-                          );
+                          return <TableCell cellDetails={holeResult} />;
                         }
                       })}
                     </tr>
@@ -383,35 +537,19 @@ export default function RoundTable(props) {
                 if (hole == "Hole") {
                   return <td></td>;
                 } else if (hole == "OUT" || hole == "IN") {
-                  let lastHole =
-                    props.holeArrayIndex === 0
-                      ? 9
-                      : props.holeArrayIndex === 1
-                      ? 18
-                      : props.holeArrayIndex === 2
-                      ? 27
-                      : 36;
-                  let results = getMatchPlayResultByHoleForTwo(
-                    lastHole,
-                    props.scorecardInfo,
-                    props.holeArrayIndex,
-                    0,
-                    1,
-                    false,
-                    true
-                  );
-                  return (
-                    <td
-                      className="alignTextCenter"
-                      style={{
-                        color: results.color ? results.color : "",
-                      }}
-                    >
-                      {results.display}
-                    </td>
-                  );
+                  const lastHole = getEndHole(props.holeArrayIndex),
+                    results = getMatchPlayResultByHoleForTwo(
+                      lastHole,
+                      props.scorecardInfo,
+                      props.holeArrayIndex,
+                      0,
+                      1,
+                      false,
+                      true
+                    );
+                  return <TableCell cellDetails={results} />;
                 } else if (hole == "Total") {
-                  let holeResult = getMatchPlayResultByHoleForTwo(
+                  const holeResult = getMatchPlayResultByHoleForTwo(
                     hole,
                     props.scorecardInfo,
                     props.holeArrayIndex,
@@ -419,71 +557,21 @@ export default function RoundTable(props) {
                     1,
                     true
                   );
-                  return (
-                    <td
-                      className="alignTextCenter"
-                      style={{
-                        color: holeResult.color ? holeResult.color : "",
-                      }}
-                    >
-                      {holeResult.display}
-                    </td>
-                  );
+                  return <TableCell cellDetails={holeResult} />;
                 } else {
-                  let holeResult = getMatchPlayResultByHoleForTwo(
+                  const holeResult = getMatchPlayResultByHoleForTwo(
                     hole,
                     props.scorecardInfo,
                     props.holeArrayIndex,
                     0,
                     1
                   );
-                  return (
-                    <td
-                      className="alignTextCenter"
-                      style={{
-                        color: holeResult.color ? holeResult.color : "",
-                      }}
-                    >
-                      {holeResult.display}
-                    </td>
-                  );
+                  return <TableCell cellDetails={holeResult} />;
                 }
               })}
             </tr>
           ) : null}
         </React.Fragment>
-      );
-    });
-  };
-
-  const PlayerScoreTables = () => {
-    return props.scorecardInfo.map((holeArray, holeArrayIndex) => {
-      return (
-        <Table
-          striped
-          bordered
-          hover
-          variant="dark"
-          size="sm"
-          key={holeArrayIndex}
-        >
-          <thead>
-            <tr>
-              {holeArray.map((hole) => (
-                <th className="alignTextCenter" key={hole}>
-                  {hole}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <StrokePlayTableBody
-              holeArray={holeArray}
-              holeArrayIndex={holeArrayIndex}
-              scorecardInfo={props.scorecardInfo}
-            />
-          </tbody>
-        </Table>
       );
     });
   };
@@ -546,7 +634,31 @@ export default function RoundTable(props) {
           >
             <thead>
               <tr>
-                <th>{matchup.name}</th>
+                <th className={"tableHeader"}>
+                  {state.matchType === "Nassau" &&
+                  pressingValidated(
+                    false,
+                    matchup.firstPlayerIndex,
+                    matchup.secondPlayerIndex,
+                    holeArray
+                  ) ? (
+                    <Button
+                      variant="success"
+                      size="sm"
+                      style={{margin: "10px"}}
+                      onClick={() =>
+                        pressingButtonHandler(
+                          false,
+                          matchup.firstPlayerIndex,
+                          matchup.secondPlayerIndex
+                        )
+                      }
+                    >
+                      Press
+                    </Button>
+                  ) : null}
+                  {matchup.name}
+                </th>
               </tr>
               <tr>
                 {holeArray.map((hole) => {
@@ -579,24 +691,14 @@ export default function RoundTable(props) {
                         </td>
                       );
                     } else {
-                      let holeScore = getMatchPlayResultByHoleForTwo(
+                      const holeScore = getMatchPlayResultByHoleForTwo(
                         hole,
                         props.scorecardInfo,
                         holeArrayIndex,
                         matchup.firstPlayerIndex,
                         matchup.secondPlayerIndex
                       );
-                      return (
-                        <td
-                          className="alignTextCenter"
-                          key={hole}
-                          style={{
-                            color: holeScore.color ? holeScore.color : "",
-                          }}
-                        >
-                          {holeScore.display}
-                        </td>
-                      );
+                      return <TableCell cellDetails={holeScore} />;
                     }
                   }
                 })}
@@ -617,7 +719,7 @@ export default function RoundTable(props) {
                               </td>
                             );
                           } else {
-                            let holeScore = getMatchPlayResultByHoleForTwo(
+                            const holeScore = getMatchPlayResultByHoleForTwo(
                               hole,
                               props.scorecardInfo,
                               holeArrayIndex,
@@ -627,17 +729,7 @@ export default function RoundTable(props) {
                               false,
                               press.startingHole
                             );
-                            return (
-                              <td
-                                className="alignTextCenter"
-                                key={hole}
-                                style={{
-                                  color: holeScore.color ? holeScore.color : "",
-                                }}
-                              >
-                                {holeScore.display}
-                              </td>
-                            );
+                            return <TableCell cellDetails={holeScore} />;
                           }
                         }
                       })}
@@ -646,42 +738,19 @@ export default function RoundTable(props) {
                 : null}
               <tr>
                 {holeArray.map((hole) => {
-                  let lastHole =
-                    holeArrayIndex === 0
-                      ? 9
-                      : holeArrayIndex === 1
-                      ? 18
-                      : holeArrayIndex === 2
-                      ? 27
-                      : 36;
+                  const lastHole = getEndHole(holeArrayIndex);
                   switch (true) {
                     case hole === "Hole" || hole < lastHole:
                       return <td></td>;
                     case hole === lastHole:
-                      let matchScore = getNineHoleTotal(
+                      const matchScore = getNineHoleTotal(
                         props.scorecardInfo,
                         holeArrayIndex,
                         displayPresses,
                         true,
                         matchup
                       );
-                      //   lastHole,
-                      //   props.scorecardInfo,
-                      //   holeArrayIndex,
-                      //   matchup.firstPlayerIndex,
-                      //   matchup.secondPlayerIndex,
-                      //   false,
-                      //   true
-                      // );
-                      return (
-                        <td style={{
-                          color: matchScore.color ? matchScore.color : ''
-												}}>
-                          {matchScore.display}
-                        </td>
-                      );
-                      debugger;
-                      //
+                      return <TableCell cellDetails={matchScore} />;
                     default:
                       return;
                   }
@@ -691,6 +760,38 @@ export default function RoundTable(props) {
           </Table>
         );
       });
+    });
+  };
+
+  const PlayerScoreTables = () => {
+    return props.scorecardInfo.map((holeArray, holeArrayIndex) => {
+      return (
+        <Table
+          striped
+          bordered
+          hover
+          variant="dark"
+          size="sm"
+          key={holeArrayIndex}
+        >
+          <thead>
+            <tr>
+              {holeArray.map((hole) => (
+                <th className="alignTextCenter" key={hole}>
+                  {hole}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <StrokePlayTableBody
+              holeArray={holeArray}
+              holeArrayIndex={holeArrayIndex}
+              scorecardInfo={props.scorecardInfo}
+            />
+          </tbody>
+        </Table>
+      );
     });
   };
 

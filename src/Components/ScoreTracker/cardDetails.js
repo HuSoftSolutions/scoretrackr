@@ -30,12 +30,12 @@ export default function CardDetails(props) {
           matchType: value,
         });
         break;
-        case "autoPress":
-          dispatch({
-            type: "update-auto-press",
-            autoPress: value,
-          });
-          break;
+        // case "autoPress":
+        //   dispatch({
+        //     type: "update-auto-press",
+        //     autoPress: value,
+        //   });
+        //   break;
       default:
         break;
     }
@@ -120,7 +120,7 @@ export default function CardDetails(props) {
               Nassau Play
             </Button>
           </ButtonGroup>
-          {state.matchType === "Nassau" ? <Form.Check type="checkbox" label="auto presses" name="autoPress" className="autoPressCheckbox" onChange={({target})=>  updateCardDetails(target, !state.autoPress)} /> : null}
+          {/* {state.matchType === "Nassau" ? <Form.Check type="checkbox" label="auto presses" name="autoPress" className="autoPressCheckbox" onChange={({target})=>  updateCardDetails(target, !state.autoPress)} /> : null} */}
         </Form.Group>
         <Form.Label className="cardDetailsLabel">Players:</Form.Label>
         <Form.Group controlId="playersInput" className="playerInputGroup">
