@@ -12,19 +12,6 @@
   margin: auto;
 }
 
-/* .reviewView_Div .Round {
-  cursor: pointer;
-  width: fit-content;
-  align-self: center;
-}
-.reviewView_Div .Round:hover {
-  text-decoration: underline;
-}
-
-.reviewView_Div .Incomplete {
-  color: darkred;
-} */
-
 .reviewView_Div .goBack {
   align-self: flex-end;
   cursor: pointer;
@@ -75,3 +62,7 @@
   float: right;
 }
 
+.tableHeader {
+  text-align: left;
+  width: 20%;
+}
