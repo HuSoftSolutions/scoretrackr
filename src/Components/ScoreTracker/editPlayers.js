@@ -1,83 +1,73 @@
-import React, { useState, useEffect } from "react";
-import { Form, InputGroup } from "react-bootstrap";
+import React, {useState, useEffect} from "react";
+import {Form, InputGroup} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import "./editPlayers.css";
 import PlayerIcon from "../../Icons_Images/playerIcon";
 
-import { useStore } from "./../../store";
+import {useStore} from "./../../store";
 
 export default function EditPlayers(props) {
-  const { state, dispatch } = useStore();
+  const {state, dispatch} = useStore();
+
+  const updateScorecard = (updatedScorecard) => {
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
+    });
+  }
 
   const onRemovePlayer = (target, playerIndex) => {
     const updatedScorecard = state.activeScorecard.filter(
       (player, index) => index !== playerIndex
     );
-    dispatch({
-      type: "update-active-scorecard",
-      scorecard: updatedScorecard,
-    });
+    updateScorecard(updatedScorecard);
   };
 
   const onChangePlayerName = (value, index) => {
     let updatedScorecard = state.activeScorecard;
-    updatedScorecard[index] = { ...updatedScorecard[index], name: value };
-
-    dispatch({
-      type: "update-active-scorecard",
-      scorecard: updatedScorecard,
-    });
+    updatedScorecard[index] = {...updatedScorecard[index], name: value};
+    updateScorecard(updatedScorecard);
   };
 
-  const removePlayerButton = (index, lastPlayerNotRemoved) => {
-    if (!lastPlayerNotRemoved) {
-      return (<div className="removePlayerButtonDiv">
+  const removePlayerButton = (index) => {
+    return (
+      <div className="removePlayerButtonDiv">
         <Button
           variant="outline-danger"
           size="sm"
           name="removePlayer"
-          onClick={({ target }) => onRemovePlayer(target, index)}
+          onClick={({target}) => onRemovePlayer(target, index)}
         >
           X
         </Button>
-</div>
-      );
-    } else
-      return index !== 0 ? (
-        <div className="removePlayerButtonDiv">
-        <Button
-          variant="outline-danger"
-          size="sm"
-          name="removePlayer"
-          onClick={({ target }) => onRemovePlayer(target, index)}
-        >
-          X
-        </Button>
-        </div>
-      ) : null;
+      </div>
+    );
   };
 
   const Player = (player, index, lastPlayerNotRemoved = false) => {
     return (
       <div className="playerDiv" key={index}>
-        {/* <div className="justifyCenter"> */}
-          <InputGroup.Prepend>
-            <InputGroup.Text id="playerNames" style={{ padding: ".375rem" }}>
-              {PlayerIcon("")}
-            </InputGroup.Text>
-          </InputGroup.Prepend>
-          <Form.Control
-            className={`${props.largeInput ? "eightyPercentWidth" : "playerInput"}`}
-            onChange={({ target }) => onChangePlayerName(target.value, index)}
-            aria-describedby="playerNames"
-            aria-label="Username"
-            placeholder="ex: John Doe"
-            size="sm"
-            name="playerName"
-            value={player.name}
-          />
-        {/* </div> */}
-          {removePlayerButton(index, lastPlayerNotRemoved)}
+        <InputGroup.Prepend>
+          <InputGroup.Text id="playerNames" style={{padding: ".375rem"}}>
+            {PlayerIcon("")}
+          </InputGroup.Text>
+        </InputGroup.Prepend>
+        <Form.Control
+          className={`${
+            props.largeInput ? "eightyPercentWidth" : "playerInput"
+          }`}
+          onChange={({target}) => onChangePlayerName(target.value, index)}
+          aria-describedby="playerNames"
+          aria-label="Username"
+          placeholder="ex: John Doe"
+          size="sm"
+          name="playerName"
+          value={player.name}
+        />
+        {!lastPlayerNotRemoved ||
+        (lastPlayerNotRemoved && state.activeScorecard.length > 1)
+          ? removePlayerButton(index)
+          : null}
       </div>
     );
   };

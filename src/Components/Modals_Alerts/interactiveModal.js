@@ -13,9 +13,8 @@ export default function InteractiveModal(props) {
 
   return (
     <Modal show={props.show}>
-      <Modal.Header className="textAlignCenter" style={{display: props.leaderboard ? "block" : ""}}>
+      <Modal.Header className="textAlignCenter">
         <Modal.Title className="Bold">{props.header}</Modal.Title>
-        {props.leaderboard ? <div className="Bold" style={{fontSize: "small"}}>{state.matchType} Play</div> : null}
       </Modal.Header>
       <Modal.Body className="modalBody">{props.children}</Modal.Body>
       <Modal.Footer>

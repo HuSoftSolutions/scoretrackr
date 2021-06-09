@@ -798,7 +798,9 @@ export default function RoundTable(props) {
   return (
     <div>
       <PlayerScoreTables />
-      {state.activeScorecard.length > 2 ? <MatchPlayScoreTables /> : null}
+      {state.activeScorecard.length > 2 && state.matchType !== "Stroke" ? (
+        <MatchPlayScoreTables />
+      ) : null}
     </div>
   );
 }

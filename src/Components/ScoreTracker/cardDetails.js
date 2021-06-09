@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Button from "react-bootstrap/Button";
-import { Form, InputGroup } from "react-bootstrap";
+import {Form, InputGroup} from "react-bootstrap";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
-import { useStore } from "./../../store";
+import {useStore} from "./../../store";
 import PlayerIcon from "../../Icons_Images/playerIcon";
 import EditPlayers from "./editPlayers";
 import "./cardDetails.css";
 
 export default function CardDetails(props) {
-  const { state, dispatch } = useStore();
+  const {state, dispatch} = useStore();
 
   const updateCardDetails = (eventTarget, value) => {
     const action = eventTarget.name,
-      updatedScorecard = state.activeScorecard;
+      updatedScorecard = [...state.activeScorecard];
     switch (action) {
       case "layoutSelection":
         dispatch({
@@ -21,7 +21,7 @@ export default function CardDetails(props) {
         });
         break;
       case "addPlayer":
-        updatedScorecard.push({ name: "" });
+        updatedScorecard.push({name: ""});
         updateScorecard(updatedScorecard);
         break;
       case "matchType":
@@ -30,12 +30,6 @@ export default function CardDetails(props) {
           matchType: value,
         });
         break;
-        // case "autoPress":
-        //   dispatch({
-        //     type: "update-auto-press",
-        //     autoPress: value,
-        //   });
-        //   break;
       default:
         break;
     }
@@ -69,6 +63,8 @@ export default function CardDetails(props) {
   };
 
   const holeFormats = [9, 18, 27, 36];
+  const matchTypes = ["Stroke", "Match", "Nassau"];
+
   return (
     <div className="cardDetails">
       <div className="cardDetailsHeader">
@@ -76,13 +72,16 @@ export default function CardDetails(props) {
       </div>
       <Form className="cardDetailsForm">
         <Form.Group className="layoutPadding">
-          <Form.Label className="cardDetailsLabel"> Choose Hole Layout: </Form.Label>
+          <Form.Label className="cardDetailsLabel">
+            {" "}
+            Choose Hole Layout:{" "}
+          </Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
             {holeFormats.map((holeAmount) => (
               <Button
                 name="layoutSelection"
                 variant={holeAmount === state.activeLayout ? "info" : "light"}
-                onClick={({ target }) => updateCardDetails(target, holeAmount)}
+                onClick={({target}) => updateCardDetails(target, holeAmount)}
                 key={holeAmount}
               >
                 {holeAmount}H
@@ -91,34 +90,28 @@ export default function CardDetails(props) {
           </ButtonGroup>
         </Form.Group>
         <Form.Group className="">
-          <Form.Label className="cardDetailsLabel"> Choose Hole Layout: </Form.Label>
+          <Form.Label className="cardDetailsLabel">
+            {" "}
+            Choose Hole Layout:{" "}
+          </Form.Label>
           <ButtonGroup size="sm" className="cardDetailsButtonGroup">
-            <Button
-              name="matchType"
-              variant={state.matchType === "Stroke" ? "info" : "light"}
-              onClick={({ target }) => updateCardDetails(target, "Stroke")}
-              key={"strokePlay"}
-            >
-              Stroke Play
-            </Button>
-            <Button
-              name="matchType"
-              variant={state.matchType === "Match" ? "info" : "light"}
-              onClick={({ target }) => updateCardDetails(target, "Match")}
-              key={"matchPlay"}
-              disabled={state.activeScorecard.length < 2 ? true : false}
-            >
-              Match Play
-            </Button>
-            <Button
-              name="matchType"
-              variant={state.matchType === "Nassau" ? "info" : "light"}
-              onClick={({ target }) => updateCardDetails(target, "Nassau")}
-              key={"NassauPlay"}
-              disabled={state.activeScorecard.length < 2 ? true : false}
-            >
-              Nassau Play
-            </Button>
+            {matchTypes.map((type) => (
+              <Button
+                name="matchType"
+                variant={state.matchType === type ? "info" : "light"}
+                onClick={({target}) => updateCardDetails(target, type)}
+                key={type}
+                disabled={
+                  type == "Match" || type == "Nassau"
+                    ? state.activeScorecard.length < 2
+                      ? true
+                      : false
+                    : false
+                }
+              >
+                {`${type} Play`}
+              </Button>
+            ))}
           </ButtonGroup>
           {/* {state.matchType === "Nassau" ? <Form.Check type="checkbox" label="auto presses" name="autoPress" className="autoPressCheckbox" onChange={({target})=>  updateCardDetails(target, !state.autoPress)} /> : null} */}
         </Form.Group>
@@ -126,7 +119,7 @@ export default function CardDetails(props) {
         <Form.Group controlId="playersInput" className="playerInputGroup">
           <div className="playerDiv">
             <InputGroup.Prepend>
-              <InputGroup.Text id="playerName" style={{ padding: ".375rem" }}>
+              <InputGroup.Text id="playerName" style={{padding: ".375rem"}}>
                 {PlayerIcon("")}
               </InputGroup.Text>
             </InputGroup.Prepend>
@@ -137,12 +130,10 @@ export default function CardDetails(props) {
               name="playerName"
               aria-describedby="playerName"
               className="playerInput"
-              onChange={({ target }) => playerInputHandler(target.value, 0)}
+              onChange={({target}) => playerInputHandler(target.value, 0)}
             />
           </div>
-
           <EditPlayers cardDetails playerList={"active"} />
-
         </Form.Group>
       </Form>
       <div className="startRoundButtonDiv">

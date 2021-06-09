@@ -11,7 +11,7 @@ import "./scoreTracker.css";
 
 export default function ScoreTracker(props) {
   const {state, dispatch} = useStore();
-  const [roundLength, setRoundLength] = useState();
+  const [roundLength, setRoundLength] = useState(); 
   const [activeHoleIndex, setActiveIndex] = useState(1);
 
   const [reviewView, toggleReviewView] = useState(false);
@@ -24,6 +24,13 @@ export default function ScoreTracker(props) {
     }
   };
 
+  const updateScorecard = (updatedScorecard) => {
+    dispatch({
+      type: "update-active-scorecard",
+      scorecard: updatedScorecard,
+    });
+  }
+
   const startRound = () => {
     let roundLengthArray = [],
       newScorecard = state.activeScorecard;
@@ -35,10 +42,7 @@ export default function ScoreTracker(props) {
       });
     }
     setRoundLength(roundLengthArray);
-    dispatch({
-      type: "update-active-scorecard",
-      scorecard: newScorecard,
-    });
+    updateScorecard(newScorecard);
     dispatch({
       type: "start-round",
       roundStarted: true,
@@ -60,10 +64,7 @@ export default function ScoreTracker(props) {
       });
       totalAddedScorecard[index]["total"] = totalCount;
     });
-    dispatch({
-      type: "update-active-scorecard",
-      scorecard: totalAddedScorecard,
-    });
+    updateScorecard(totalAddedScorecard);
   };
 
   const openScorecardReview = () => {
@@ -74,7 +75,7 @@ export default function ScoreTracker(props) {
 
     if (!reviewViewRoundData) {
       for (let i = 1; i <= state.activeLayout; i++) {
-        if (i == 1 || i == 10) nineHoleSplit.push("Hole");
+        if (i == 1 || i == 10 || i == 19 || i == 28) nineHoleSplit.push("Hole");
         if (state.activeLayout > 9) {
           if (i % 9 == 0) {
             nineHoleSplit.push(i);
@@ -106,10 +107,7 @@ export default function ScoreTracker(props) {
   const addPlayer = () => {
     let updatedScorecard = state.activeScorecard;
     updatedScorecard.push({name: "", holes: []});
-    dispatch({
-      type: "update-active-scorecard",
-      scorecard: updatedScorecard,
-    });
+    updateScorecard(updatedScorecard);
   };
 
   const validateActivePlayers = () => {
